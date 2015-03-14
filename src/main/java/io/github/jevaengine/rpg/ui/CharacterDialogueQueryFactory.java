@@ -9,7 +9,6 @@ import io.github.jevaengine.rpg.dialogue.IDialogueListenerSession;
 import io.github.jevaengine.rpg.dialogue.IDialogueListenerSession.IDialogueListenerSessionObserver;
 import io.github.jevaengine.ui.Button;
 import io.github.jevaengine.ui.Button.IButtonPressObserver;
-import io.github.jevaengine.ui.Control;
 import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
 import io.github.jevaengine.ui.NoSuchControlException;
