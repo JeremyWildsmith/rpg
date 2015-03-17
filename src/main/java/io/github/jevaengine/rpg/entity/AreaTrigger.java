@@ -50,8 +50,6 @@ public final class AreaTrigger implements IEntity
 {
 	private static final int SCAN_INTERVAL = 400;
 	
-	private static final AtomicInteger m_unnamedCount = new AtomicInteger();
-	
 	private final Logger m_logger = LoggerFactory.getLogger(AreaTrigger.class);
 
 	private final Observers m_observers = new Observers();
@@ -70,9 +68,9 @@ public final class AreaTrigger implements IEntity
 
 	private IPhysicsBody m_body = new NullPhysicsBody();
 	
-	public AreaTrigger(IAudioClipFactory audioClipFactory, IScriptBuilder scriptBuilder, @Nullable String name, float width, float height)
+	public AreaTrigger(IAudioClipFactory audioClipFactory, IScriptBuilder scriptBuilder, String name, float width, float height)
 	{
-		m_name = name == null ? this.getClass().getName() + m_unnamedCount.getAndIncrement() : name;
+		m_name = name;
 		
 		m_width = width;
 		m_height = height;

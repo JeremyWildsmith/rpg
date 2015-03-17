@@ -25,6 +25,7 @@ import io.github.jevaengine.world.entity.LogicController;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 public final class RpgEntityFactory implements IEntityFactory
 {
 	private final Logger m_logger = LoggerFactory.getLogger(RpgEntityFactory.class);
+	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger();
 	
 	private final IScriptBuilderFactory m_scriptBuilderFactory;
 	private final IAudioClipFactory m_audioClipFactory;
@@ -54,7 +56,7 @@ public final class RpgEntityFactory implements IEntityFactory
 	@Nullable
 	public Class<? extends IEntity> lookup(String className)
 	{
-		for(UsrEntity e : UsrEntity.values())
+		for(RpgEntity e : RpgEntity.values())
 		{
 			if(e.getName().equals(className))
 				return e.getEntityClass();
@@ -67,7 +69,7 @@ public final class RpgEntityFactory implements IEntityFactory
 	@Nullable
 	public <T extends IEntity> String lookup(Class<T> entityClass)
 	{
-		for(UsrEntity e : UsrEntity.values())
+		for(RpgEntity e : RpgEntity.values())
 		{
 			if(e.getEntityClass().equals(entityClass))
 				return e.getName();
@@ -144,7 +146,6 @@ public final class RpgEntityFactory implements IEntityFactory
 		
 		String configPath = config.getPath();
 		
-		
 		IImmutableVariable varConfig = auxConfig;
 		
 		try
@@ -156,10 +157,14 @@ public final class RpgEntityFactory implements IEntityFactory
 			m_logger.error("Error occured constructing configuration for entity, ignoring external configuration and using just aux config.", e);
 		}
 		
-		for(UsrEntity e : UsrEntity.values())
+		for(RpgEntity e : RpgEntity.values())
 		{
 			if(e.getEntityClass().equals(entityClass))
-				return (T)e.getBuilder().create(this, instanceName, config, varConfig);
+			{
+				return (T)e.getBuilder().create(this,
+																				instanceName == null ? this.getClass().getName() + m_unnamedEntityCount.getAndIncrement() : instanceName,
+																				config, varConfig);
+			}
 		}
 		
 		throw new EntityConstructionException(entityClass.getName(), new UnsupportedEntityTypeException(entityClass));
@@ -176,11 +181,11 @@ public final class RpgEntityFactory implements IEntityFactory
 		return create(entityClazz, instanceName, config, auxConfig);
 	}
 	
-	private enum UsrEntity
+	private enum RpgEntity
 	{
 		AreaTrigger(AreaTrigger.class, "areaTrigger", new EntityBuilder() {
 			@Override
-			public IEntity create(RpgEntityFactory entityFactory, @Nullable String name, URI context, IImmutableVariable config) throws EntityConstructionException
+			public IEntity create(RpgEntityFactory entityFactory, String name, URI context, IImmutableVariable config) throws EntityConstructionException
 			{
 				try
 				{
@@ -203,14 +208,14 @@ public final class RpgEntityFactory implements IEntityFactory
 					return new AreaTrigger(entityFactory.m_audioClipFactory, scriptBuilder, name, decl.width, decl.height);
 				} catch (ValueSerializationException e)
 				{
-					throw new EntityConstructionException(UsrEntity.AreaTrigger.getName(), e);
+					throw new EntityConstructionException(RpgEntity.AreaTrigger.getName(), e);
 				}
 			}
 		}),
 		
 		RpgCharacter(IRpgCharacter.class, "character", new EntityBuilder() {
 			@Override
-			public IEntity create(RpgEntityFactory entityFactory, @Nullable String name, @Nullable URI config, @Nullable IImmutableVariable auxConfig) throws EntityConstructionException
+			public IEntity create(RpgEntityFactory entityFactory, String name, @Nullable URI config, @Nullable IImmutableVariable auxConfig) throws EntityConstructionException
 			{
 				try
 				{
@@ -220,7 +225,7 @@ public final class RpgEntityFactory implements IEntityFactory
 						return entityFactory.m_characterFactory.create(name, config, auxConfig == null ? new NullVariable() : auxConfig);
 				} catch (CharacterCreationException e)
 				{
-					throw new EntityConstructionException(UsrEntity.RpgCharacter.getName(), e);
+					throw new EntityConstructionException(RpgEntity.RpgCharacter.getName(), e);
 				}
 			}
 		}),
@@ -233,7 +238,7 @@ public final class RpgEntityFactory implements IEntityFactory
 				{
 					LogicControllerDeclaration decl = config.getValue(LogicControllerDeclaration.class);
 					IScriptBuilder scriptBuilder = new NullScriptBuilder();
-					
+
 					try
 					{
 						if(decl.behavior != null)
@@ -250,7 +255,7 @@ public final class RpgEntityFactory implements IEntityFactory
 					return new LogicController(new DefaultEntityTaskModelFactory(), scriptBuilder, entityFactory.m_audioClipFactory, instanceName);
 				} catch (ValueSerializationException e)
 				{
-					throw new EntityConstructionException(UsrEntity.LogicController.getName(), e);
+					throw new EntityConstructionException(RpgEntity.LogicController.getName(), e);
 				}
 			}
 		});
@@ -259,7 +264,7 @@ public final class RpgEntityFactory implements IEntityFactory
 		private final String m_name;
 		private final EntityBuilder m_builder;
 
-		UsrEntity(Class<? extends IEntity> clazz, String name, EntityBuilder builder)
+		RpgEntity(Class<? extends IEntity> clazz, String name, EntityBuilder builder)
 		{
 			m_class = clazz;
 			m_name = name;
@@ -285,7 +290,7 @@ public final class RpgEntityFactory implements IEntityFactory
 		{
 			protected final Logger m_logger = LoggerFactory.getLogger(EntityBuilder.class);
 			
-			public abstract IEntity create(RpgEntityFactory entityFactory, @Nullable String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException;
+			public abstract IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException;
 		}
 		
 	}

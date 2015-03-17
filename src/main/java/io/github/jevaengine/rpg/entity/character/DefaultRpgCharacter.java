@@ -64,14 +64,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class DefaultRpgCharacter implements IRpgCharacter
-{
-	private static final AtomicInteger m_unnamedCount = new AtomicInteger(0);
-	
-	private final PhysicsBodyDescription m_physicsBodyDescription;
-	
-	
+{	
 	private final Logger m_logger = LoggerFactory.getLogger(DefaultRpgCharacter.class);
-		
+
+	private final PhysicsBodyDescription m_physicsBodyDescription;	
+	
 	private final String m_name;
 
 	private final AttributeSet m_attributes;
@@ -111,11 +108,11 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 						IItemStore inventory,
 						IActionSceneModel model,
 						PhysicsBodyDescription physicsBodyDescription,
-						@Nullable String name)
+						String name)
 	{
 		m_dialogueRouteFactory = dialogueRotueFactory;
 		
-		m_name = name == null ? this.getClass().getName() + m_unnamedCount.getAndIncrement() : name;
+		m_name = name;
 		m_physicsBodyDescription = physicsBodyDescription;
 
 		m_inventory = inventory;
