@@ -27,9 +27,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public interface IRpgCharacter extends IEntity
-{
-	IImmutableAttributeSet getAttributes();
-	
+{	
 	IImmutableItemStore getInventory();
 	IImmutableLoadout getLoadout();
 	
@@ -138,12 +136,6 @@ public interface IRpgCharacter extends IEntity
 
 		@Override
 		public void update(int delta) { }
-
-		@Override
-		public IImmutableAttributeSet getAttributes()
-		{
-			return new AttributeSet();
-		}
 
 		@Override
 		public IImmutableItemStore getInventory()

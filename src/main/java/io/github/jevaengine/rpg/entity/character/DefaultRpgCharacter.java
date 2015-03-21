@@ -15,7 +15,6 @@ package io.github.jevaengine.rpg.entity.character;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.AttributeSet;
-import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
 import io.github.jevaengine.rpg.entity.character.tasks.AttackTask;
@@ -118,19 +117,10 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		m_inventory = inventory;
 		m_loadout = loadout;
 
-		m_bridge = new RpgCharacterBridge(audioClipFactory, scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
 		m_taskModel = new DefaultEntityTaskModel(this);
 	
 		m_attributes = attributes;
-		
-		try
-		{
-			scriptBuilder.create(m_bridge);
-		} catch (ScriptConstructionException e)
-		{
-			m_logger.error("Failed instantiate behavior for " + getInstanceName() + ". Assuming null behavior.", e);	
-		}
-		
+			
 		m_model = model;
 		
 		m_dialogueResolver = dialogueResolver.create(this, m_attributes, model);
@@ -139,6 +129,17 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		m_movementResolver = movementResolver.create(this, m_attributes, model);
 		m_visionResolver = visionResolver.create(this, m_attributes, model);
 		m_allegianceResolver = allegianceResolver.create(this, attributes, model);
+	
+		m_bridge = new RpgCharacterBridge(audioClipFactory, scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
+		
+		try
+		{
+			scriptBuilder.create(m_bridge);
+		} catch (ScriptConstructionException e)
+		{
+			m_logger.error("Failed instantiate behavior for " + getInstanceName() + ". Assuming null behavior.", e);	
+		}
+	
 	}
 
 	@Override
@@ -179,12 +180,6 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	public IImmutableLoadout getLoadout()
 	{
 		return m_loadout;
-	}
-
-	@Override
-	public IImmutableAttributeSet getAttributes()
-	{
-		return m_attributes;
 	}
 
 	@Override
@@ -315,12 +310,43 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	{
 		private final ITask m_lookTask;
 		public final ScriptEvent onLookFound;
+		public final ScriptEvent onDie;
+		public final ScriptEvent onRevive;
 		
 		public RpgCharacterBridge(IAudioClipFactory audioClipFactory, IFunctionFactory functionFactory, URI scriptUri)
 		{
 			super(DefaultRpgCharacter.this, audioClipFactory, functionFactory);
+			
 			onLookFound = new ScriptEvent(functionFactory);
-		
+			onDie = new ScriptEvent(functionFactory);
+			onRevive = new ScriptEvent(functionFactory);
+			
+			DefaultRpgCharacter.this.m_statusResolver.getObservers().add(new IStatusResolver.IStatusResolverObserver() {
+				@Override
+				public void died()
+				{
+					try
+					{
+						onDie.fire();
+					} catch (ScriptExecuteException e)
+					{
+						m_logger.error("Error occured executing onDie script event.");
+					}
+				}
+
+				@Override
+				public void revived()
+				{
+					try
+					{
+						onRevive.fire();
+					} catch (ScriptExecuteException e)
+					{
+						m_logger.error("Error occured executing onRevie script event.");
+					}
+				}
+			});
+			
 			m_lookTask = new SearchForTask<>(IRpgCharacter.class, new ISearchListener<IRpgCharacter>() {
 				@Override
 				public void found(IRpgCharacter entity)
@@ -340,9 +366,9 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 			m_flags.put(name, value);
 		}
 		
-		public AttributeSet getAttributes()
+		public boolean isDead()
 		{
-			return m_attributes;
+			return m_statusResolver.isDead();
 		}
 		
 		public void wonder(int radius)
