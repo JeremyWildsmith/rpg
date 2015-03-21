@@ -6,6 +6,7 @@ import io.github.jevaengine.rpg.entity.character.IAllegianceResolver.NullAllegia
 import io.github.jevaengine.rpg.entity.character.ICombatResolver.NullCombatResolver;
 import io.github.jevaengine.rpg.entity.character.IDialogueResolver.NullDialogueResolver;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.NullMovementResolver;
+import io.github.jevaengine.rpg.entity.character.IStatusResolver.NullStatusResolver;
 import io.github.jevaengine.rpg.entity.character.IVisionResolver.NullVisionResolver;
 import io.github.jevaengine.rpg.item.IImmutableItemStore;
 import io.github.jevaengine.util.IObserverRegistry;
@@ -32,6 +33,7 @@ public interface IRpgCharacter extends IEntity
 	IImmutableItemStore getInventory();
 	IImmutableLoadout getLoadout();
 	
+	IStatusResolver getStatusResolver();
 	ICombatResolver getCombatResolver();
 	IDialogueResolver getDialogueResolver();
 	IMovementResolver getMovementResolver();
@@ -155,6 +157,12 @@ public interface IRpgCharacter extends IEntity
 			return new DefaultLoadout();
 		}
 
+		@Override
+		public IStatusResolver getStatusResolver()
+		{
+			return new NullStatusResolver();
+		}
+		
 		@Override
 		public ICombatResolver getCombatResolver()
 		{

@@ -35,7 +35,6 @@ import io.github.jevaengine.script.IScriptBuilder.ScriptConstructionException;
 import io.github.jevaengine.script.ScriptEvent;
 import io.github.jevaengine.script.ScriptExecuteException;
 import io.github.jevaengine.util.IObserverRegistry;
-import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.World;
@@ -58,7 +57,6 @@ import java.util.Collections;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +76,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	private final IMovementResolver m_movementResolver;
 	private final IVisionResolver m_visionResolver;
 	private final IAllegianceResolver m_allegianceResolver;
+	private final IStatusResolver m_statusResolver;
 	
 	private final IItemStore m_inventory;
 	private final ILoadout m_loadout;
@@ -99,6 +98,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 						IAudioClipFactory audioClipFactory,
 						IDialogueRouteFactory dialogueRotueFactory,
 						AttributeSet attributes,
+						IStatusResolverFactory statusResolver,
 						ICombatResolverFactory combatResolver,
 						IDialogueResolverFactory dialogueResolver,
 						IMovementResolverFactory movementResolver,
@@ -134,6 +134,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		m_model = model;
 		
 		m_dialogueResolver = dialogueResolver.create(this, m_attributes, model);
+		m_statusResolver = statusResolver.create(this, m_attributes, model);
 		m_combatResolver = combatResolver.create(this, m_attributes, model);
 		m_movementResolver = movementResolver.create(this, m_attributes, model);
 		m_visionResolver = visionResolver.create(this, m_attributes, model);
@@ -186,6 +187,12 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		return m_attributes;
 	}
 
+	@Override
+	public IStatusResolver getStatusResolver()
+	{
+		return m_statusResolver;
+	}
+	
 	@Override
 	public ICombatResolver getCombatResolver()
 	{
