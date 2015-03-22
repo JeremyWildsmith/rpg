@@ -1,9 +1,5 @@
 package io.github.jevaengine.rpg;
 
-import io.github.jevaengine.script.IFunctionFactory;
-import io.github.jevaengine.script.NullFunctionFactory;
-import io.github.jevaengine.script.ScriptEvent;
-import io.github.jevaengine.script.ScriptExecuteException;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 
@@ -12,47 +8,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class AttributeSet implements IImmutableAttributeSet
 {
-	private final Logger m_logger = LoggerFactory.getLogger(AttributeSet.class);
-	
 	private final Map<IAttributeIdentifier, Attribute> m_attributes = new HashMap<>();
-	private final IFunctionFactory m_functionFactory;
-	
-	public AttributeSet()
-	{
-		this(new NullFunctionFactory());
-	}
+
+	public AttributeSet() { }
 	
 	public AttributeSet(IImmutableAttributeSet src)
 	{
-		this(new NullFunctionFactory(), src);
-	}
-	
-	public AttributeSet(Map<IAttributeIdentifier, Float> initialAttributes)
-	{
-		this(new NullFunctionFactory(), initialAttributes);
-	}
-	
-	public AttributeSet(IFunctionFactory functionFactory)
-	{
-		m_functionFactory = functionFactory;
-	}
-	
-	public AttributeSet(IFunctionFactory functionFactory, IImmutableAttributeSet src)
-	{
-		m_functionFactory = functionFactory;
-		
 		for(Map.Entry<IAttributeIdentifier, IImmutableAttribute> a : src.getSet())
 			m_attributes.put(a.getKey(), new Attribute(a.getValue().get()));
 	}
 	
-	public AttributeSet(IFunctionFactory functionFactory, Map<IAttributeIdentifier, Float> initialAttributes)
+	public AttributeSet(Map<IAttributeIdentifier, Float> initialAttributes)
 	{
-		m_functionFactory = functionFactory;
 		for(Map.Entry<IAttributeIdentifier, Float> a : initialAttributes.entrySet())
 			m_attributes.put(a.getKey(), new Attribute(a.getValue()));
 	}
@@ -86,7 +56,7 @@ public final class AttributeSet implements IImmutableAttributeSet
 	
 	public AttributeSet overlay(AttributeSet ... statistics)
 	{
-		AttributeSet buffer = new AttributeSet(m_functionFactory, this);
+		AttributeSet buffer = new AttributeSet(this);
 		
 		for(AttributeSet s : statistics)
 			buffer.merge(s);
@@ -153,12 +123,10 @@ public final class AttributeSet implements IImmutableAttributeSet
 		}
 	}
 	
-	public final class Attribute implements IAttribute
+	private final class Attribute implements IAttribute
 	{
 		private final Observers m_observers = new Observers();
 		private float m_value;
-		
-		public ScriptEvent onChanged = new ScriptEvent(m_functionFactory);
 		
 		public Attribute(float value)
 		{
@@ -192,13 +160,6 @@ public final class AttributeSet implements IImmutableAttributeSet
 			m_value = newValue;
 			
 			m_observers.raise(IAttributeChangeObserver.class).changed(newValue - oldValue);
-			
-			try
-			{
-				onChanged.fire(newValue - oldValue);
-			} catch (ScriptExecuteException e) {
-				m_logger.error("Error occured informing script about attribute change", e);
-			}
 		}
 		
 		@Override
