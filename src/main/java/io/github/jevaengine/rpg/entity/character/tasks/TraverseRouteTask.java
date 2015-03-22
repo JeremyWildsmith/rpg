@@ -29,7 +29,7 @@ public final class TraverseRouteTask implements ITask
 	{
 		m_steeringBehavior = new SteeringBehaviorList(new ISteeringBehavior[] {
 				new TraverseRouteBehavior(1.0F, route.reduce(), arrivalTolorance, waypointTolorance),
-				new AvoidanceBehavior(.1F)	
+				new AvoidanceBehavior(waypointTolorance / 2)
 			});
 	}
 	
@@ -68,7 +68,6 @@ public final class TraverseRouteTask implements ITask
 
 	private class MovementDirector implements IMovementDirector
 	{
-
 		@Override
 		public ISteeringBehavior getBehavior()
 		{
