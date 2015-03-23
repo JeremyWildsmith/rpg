@@ -1,6 +1,7 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.IDisposable;
+import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.rpg.entity.character.IImmutableLoadout.ILoadoutObserver;
 import io.github.jevaengine.rpg.item.IItem;
@@ -83,9 +84,9 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 	}
 
 	@Override
-	public Collection<ISceneModelComponent> getComponents()
+	public Collection<ISceneModelComponent> getComponents(Matrix3X3 projection)
 	{
-		return m_modelMerge.getComponents();
+		return m_modelMerge.getComponents(projection);
 	}
 
 	@Override

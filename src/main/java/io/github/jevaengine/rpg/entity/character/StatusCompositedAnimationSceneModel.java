@@ -7,6 +7,7 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.graphics.ParticleEmitter;
+import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.math.Vector3F;
@@ -137,9 +138,9 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	}
 
 	@Override
-	public Collection<ISceneModelComponent> getComponents()
+	public Collection<ISceneModelComponent> getComponents(Matrix3X3 projection)
 	{
-		List<ISceneModelComponent> components = new ArrayList<>(m_baseModel.getComponents());
+		List<ISceneModelComponent> components = new ArrayList<>(m_baseModel.getComponents(projection));
 		components.addAll(m_components);
 		
 		return components;
