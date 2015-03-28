@@ -205,7 +205,7 @@ public final class RpgEntityFactory implements IEntityFactory
 						m_logger.error("Error constructing behavior for entity " + name +". Using null behavior instead.", e);
 					}
 					
-					return new AreaTrigger(entityFactory.m_audioClipFactory, scriptBuilder, name, decl.width, decl.height);
+					return new AreaTrigger(entityFactory.m_audioClipFactory, scriptBuilder, name, decl.searchZone);
 				} catch (ValueSerializationException e)
 				{
 					throw new EntityConstructionException(RpgEntity.AreaTrigger.getName(), e);
@@ -322,23 +322,15 @@ public final class RpgEntityFactory implements IEntityFactory
 	
 	public static class AreaTriggerDeclaration implements ISerializable
 	{
-		public float width = 1;
-		public float height = 1;
 		public String behavior;
-		
-		public IImmutableVariable arguments = new NullVariable();
+		public String searchZone;
 		
 		public AreaTriggerDeclaration() { }
 		
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException
 		{
-			target.addChild("width").setValue(this.width);
-			target.addChild("height").setValue(this.height);
-			
-			if(arguments.getChildren().length > 0)
-				target.addChild("arguments").setValue(arguments);
-			
+			target.addChild("searchZone").setValue(searchZone);
 			if(behavior != null)
 				target.addChild("behavior").setValue(behavior);
 		}
@@ -348,18 +340,10 @@ public final class RpgEntityFactory implements IEntityFactory
 		{
 			try
 			{
-				if(source.childExists("width"))
-					this.width = source.getChild("width").getValue(Double.class).floatValue();
-
-				if(source.childExists("height"))
-					this.height = source.getChild("height").getValue(Double.class).floatValue();
+				this.searchZone = source.getChild("searchZone").getValue(String.class);
 				
 				if(source.childExists("behavior"))
 					this.behavior = source.getChild("behavior").getValue(String.class);
-				
-				if(source.childExists("arguments"))
-					this.arguments = source.getChild("arguments");
-				
 			} catch(NoSuchChildVariableException e)
 			{
 				throw new ValueSerializationException(e);

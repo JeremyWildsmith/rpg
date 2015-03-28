@@ -13,8 +13,7 @@
 package io.github.jevaengine.rpg.entity;
 
 import io.github.jevaengine.audio.IAudioClipFactory;
-import io.github.jevaengine.math.Rect2F;
-import io.github.jevaengine.math.Vector2F;
+import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.script.IFunctionFactory;
 import io.github.jevaengine.script.IScriptBuilder;
@@ -22,7 +21,6 @@ import io.github.jevaengine.script.IScriptBuilder.ScriptConstructionException;
 import io.github.jevaengine.script.ScriptEvent;
 import io.github.jevaengine.script.ScriptExecuteException;
 import io.github.jevaengine.util.IObserverRegistry;
-import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.World;
 import io.github.jevaengine.world.entity.IEntity;
@@ -41,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,23 +54,19 @@ public final class AreaTrigger implements IEntity
 	private World m_world;
 	
 	private final String m_name;
+	private final String m_searchZone;
 	
 	private int m_lastScan;	
 	private List<IRpgCharacter> m_includedEntities = new ArrayList<>();
 
-	private final float m_width;
-	private final float m_height;
-	
 	private AreaTriggerBridge m_bridge;
 
 	private IPhysicsBody m_body = new NullPhysicsBody();
 	
-	public AreaTrigger(IAudioClipFactory audioClipFactory, IScriptBuilder scriptBuilder, String name, float width, float height)
+	public AreaTrigger(IAudioClipFactory audioClipFactory, IScriptBuilder scriptBuilder, String name, String searchZone)
 	{
 		m_name = name;
-		
-		m_width = width;
-		m_height = height;
+		m_searchZone = searchZone;
 		
 		m_bridge = new AreaTriggerBridge(audioClipFactory, scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
 		
@@ -94,19 +87,6 @@ public final class AreaTrigger implements IEntity
 		
 		m_includedEntities.clear();
 		m_observers.clear();
-	}
-	
-	private Rect2F getContainingBounds()
-	{
-		Vector2F location = getBody().getLocation().getXy();
-		
-		//The bounds for an area trigger are meant to be interpreted as containing
-		//whole tiles. I.e, a width of 1, and height of 1, located at 0,0 should contain the tile 0,0.
-		//The way the engine interprets a rect located at 0,0 with a width 1 and height 1 is to have it start
-		//from the origin of 0,0 (the center of the tile at 0,0). In this case, we want it to start
-		//from the corner, thus containing the entire tile...
-
-		return new Rect2F(location.x - 0.5F, location.y - 0.5F, m_width, m_height);
 	}
 	
 	@Override
@@ -156,6 +136,37 @@ public final class AreaTrigger implements IEntity
 		m_body = new NullPhysicsBody();
 	}
 	
+	private void refreshEntities(Rect3F zone)
+	{
+		IRpgCharacter[] entities = getWorld().getEntities().search(IRpgCharacter.class, new RectangleSearchFilter<IRpgCharacter>(zone.getXy()));
+
+		List<IRpgCharacter> unfoundCharacters = new ArrayList<>(m_includedEntities);
+
+		for (IEntity entity : entities)
+		{
+			if (!(entity instanceof IRpgCharacter))
+				continue;
+
+			IRpgCharacter character = (IRpgCharacter)entity;
+
+			if (!unfoundCharacters.contains(character))
+			{
+				m_includedEntities.add(character);
+				m_observers.raise(IAreaTriggerAreaObserver.class).enter(character);
+				character.getObservers().add(new TriggerCharacterObserver(character));
+			} else
+			{
+				unfoundCharacters.remove(character);
+			}
+		}
+
+		for (IRpgCharacter character : unfoundCharacters)
+		{
+			m_includedEntities.remove(character);
+			m_observers.raise(IAreaTriggerAreaObserver.class).leave(character);
+		}
+	}
+	
 	@Override
 	public boolean isStatic()
 	{
@@ -195,33 +206,12 @@ public final class AreaTrigger implements IEntity
 		{
 			m_lastScan = SCAN_INTERVAL;
 
-			IEntity[] entities = getWorld().getEntities().search(new RectangleSearchFilter<IEntity>(getContainingBounds()));
-
-			List<IRpgCharacter> unfoundCharacters = new ArrayList<>(m_includedEntities);
-
-			for (IEntity entity : entities)
-			{
-				if (!(entity instanceof IRpgCharacter))
-					continue;
-
-				IRpgCharacter character = (IRpgCharacter)entity;
-
-				if (!unfoundCharacters.contains(character))
-				{
-					m_includedEntities.add(character);
-					m_observers.raise(IAreaTriggerAreaObserver.class).enter(character);
-					character.getObservers().add(new TriggerCharacterObserver(character));
-				} else
-				{
-					unfoundCharacters.remove(character);
-				}
-			}
-
-			for (IRpgCharacter character : unfoundCharacters)
-			{
-				m_includedEntities.remove(character);
-				m_observers.raise(IAreaTriggerAreaObserver.class).leave(character);
-			}
+			Rect3F zone = getWorld().getZones().get(m_searchZone);
+			
+			if(zone != null)
+				refreshEntities(zone);
+			else
+				m_logger.error(String.format("Respective zone %s for area trigger %s does not exist.", m_searchZone, m_name));
 		}
 	}
 
