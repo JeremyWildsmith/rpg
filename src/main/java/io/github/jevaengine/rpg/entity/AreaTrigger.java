@@ -142,13 +142,8 @@ public final class AreaTrigger implements IEntity
 
 		List<IRpgCharacter> unfoundCharacters = new ArrayList<>(m_includedEntities);
 
-		for (IEntity entity : entities)
+		for (IRpgCharacter character : entities)
 		{
-			if (!(entity instanceof IRpgCharacter))
-				continue;
-
-			IRpgCharacter character = (IRpgCharacter)entity;
-
 			if (!unfoundCharacters.contains(character))
 			{
 				m_includedEntities.add(character);
