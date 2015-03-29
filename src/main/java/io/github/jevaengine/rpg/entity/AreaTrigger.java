@@ -69,12 +69,12 @@ public final class AreaTrigger implements IEntity
 
 	private IPhysicsBody m_body = new NullPhysicsBody();
 	
-	public AreaTrigger(IAudioClipFactory audioClipFactory, IScriptBuilder scriptBuilder, String name, String searchZone)
+	public AreaTrigger(IScriptBuilder scriptBuilder, String name, String searchZone)
 	{
 		m_name = name;
 		m_searchZone = searchZone;
 		
-		m_bridge = new AreaTriggerBridge(audioClipFactory, scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
+		m_bridge = new AreaTriggerBridge(scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
 		
 		try {
 			scriptBuilder.create(m_bridge);
@@ -266,9 +266,9 @@ public final class AreaTrigger implements IEntity
 		public final ScriptEvent onAreaEnter;
 		public final ScriptEvent onAreaLeave;
 		
-		public AreaTriggerBridge(IAudioClipFactory audioClipFactory, IFunctionFactory functionFactory, URI scriptUri)
+		public AreaTriggerBridge(IFunctionFactory functionFactory, URI scriptUri)
 		{
-			super(AreaTrigger.this, audioClipFactory, functionFactory, scriptUri);
+			super(AreaTrigger.this, functionFactory, scriptUri);
 			onAreaEnter = new ScriptEvent(functionFactory);
 			onAreaLeave = new ScriptEvent(functionFactory);
 		}

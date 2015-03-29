@@ -223,7 +223,7 @@ public final class RpgEntityFactory implements IEntityFactory
 						m_logger.error("Error constructing behavior for entity " + name +". Using null behavior instead.", e);
 					}
 					
-					return new AreaTrigger(entityFactory.m_audioClipFactory, scriptBuilder, name, decl.searchZone);
+					return new AreaTrigger(scriptBuilder, name, decl.searchZone);
 				} catch (ValueSerializationException e)
 				{
 					throw new EntityConstructionException(RpgEntity.AreaTrigger.getName(), e);
@@ -270,7 +270,7 @@ public final class RpgEntityFactory implements IEntityFactory
 						m_logger.error("Error constructing behavior for entity " + instanceName +". Using null behavior instead.", e);
 					}
 					
-					return new LogicController(new DefaultEntityTaskModelFactory(), scriptBuilder, entityFactory.m_audioClipFactory, instanceName);
+					return new LogicController(new DefaultEntityTaskModelFactory(), scriptBuilder, instanceName);
 				} catch (ValueSerializationException e)
 				{
 					throw new EntityConstructionException(RpgEntity.LogicController.getName(), e);

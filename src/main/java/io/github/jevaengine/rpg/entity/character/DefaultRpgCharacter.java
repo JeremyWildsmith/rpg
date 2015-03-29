@@ -18,7 +18,6 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
-import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
@@ -99,8 +98,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	
 	private final Map<String, Integer> m_flags = new HashMap<>();
 	
-	public DefaultRpgCharacter(IScriptBuilder scriptBuilder, 
-						IAudioClipFactory audioClipFactory,
+	public DefaultRpgCharacter(IScriptBuilder scriptBuilder,
 						IDialogueRouteFactory dialogueRotueFactory,
 						AttributeSet attributes,
 						IStatusResolverFactory statusResolver,
@@ -136,7 +134,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		m_visionResolver = visionResolver.create(this, m_attributes, model);
 		m_allegianceResolver = allegianceResolver.create(this, attributes, model);
 	
-		m_bridge = new RpgCharacterBridge(audioClipFactory, scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
+		m_bridge = new RpgCharacterBridge(scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
 		
 		try
 		{
@@ -319,9 +317,9 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		public final ScriptEvent onDie;
 		public final ScriptEvent onRevive;
 		
-		public RpgCharacterBridge(IAudioClipFactory audioClipFactory, IFunctionFactory functionFactory, URI scriptUri)
+		public RpgCharacterBridge(IFunctionFactory functionFactory, URI scriptUri)
 		{
-			super(DefaultRpgCharacter.this, audioClipFactory, functionFactory);
+			super(DefaultRpgCharacter.this, functionFactory);
 			
 			onLookFound = new ScriptEvent(functionFactory);
 			onDie = new ScriptEvent(functionFactory);
