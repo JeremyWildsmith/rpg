@@ -18,7 +18,9 @@
  */
 package io.github.jevaengine.rpg.entity;
 
+import io.github.jevaengine.audio.IAudioClip;
 import io.github.jevaengine.audio.IAudioClipFactory;
+import io.github.jevaengine.audio.IAudioClipFactory.AudioClipConstructionException;
 import io.github.jevaengine.config.IConfigurationFactory;
 import io.github.jevaengine.config.IConfigurationFactory.ConfigurationConstructionException;
 import io.github.jevaengine.config.IImmutableVariable;
@@ -201,6 +203,25 @@ public final class RpgEntityFactory implements IEntityFactory
 	
 	private enum RpgEntity
 	{
+		AmbientAudioSource(AmbientAudioSource.class, "ambientAudioSource", new EntityBuilder() {
+		@Override
+			public IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException
+			{
+				try
+				{
+					AmbientAudioSourceDeclaration decl = auxConfig.getValue(AmbientAudioSourceDeclaration.class);
+					
+					IScriptBuilder behavior = entityFactory.m_scriptBuilderFactory.create(context.resolve(new URI(decl.behavior)));
+					IAudioClip source = entityFactory.m_audioClipFactory.create(context.resolve(new URI(decl.audio)));
+				
+					return new AmbientAudioSource(source, behavior, instanceName);
+				} catch (ValueSerializationException | AudioClipConstructionException | URISyntaxException | ScriptBuilderConstructionException e)
+				{
+					throw new EntityConstructionException(e);
+				}
+			}
+		}),
+		
 		AreaTrigger(AreaTrigger.class, "areaTrigger", new EntityBuilder() {
 			@Override
 			public IEntity create(RpgEntityFactory entityFactory, String name, URI context, IImmutableVariable config) throws EntityConstructionException
@@ -233,14 +254,14 @@ public final class RpgEntityFactory implements IEntityFactory
 		
 		RpgCharacter(IRpgCharacter.class, "character", new EntityBuilder() {
 			@Override
-			public IEntity create(RpgEntityFactory entityFactory, String name, @Nullable URI config, @Nullable IImmutableVariable auxConfig) throws EntityConstructionException
+			public IEntity create(RpgEntityFactory entityFactory, String name, URI context, IImmutableVariable config) throws EntityConstructionException
 			{
 				try
 				{
 					if(config == null)
-						return entityFactory.m_characterFactory.create(name, auxConfig == null ? new NullVariable() : auxConfig);
+						return entityFactory.m_characterFactory.create(name, config);
 					else
-						return entityFactory.m_characterFactory.create(name, config, auxConfig == null ? new NullVariable() : auxConfig);
+						return entityFactory.m_characterFactory.create(name, context, config);
 				} catch (CharacterCreationException e)
 				{
 					throw new EntityConstructionException(RpgEntity.RpgCharacter.getName(), e);
@@ -310,7 +331,37 @@ public final class RpgEntityFactory implements IEntityFactory
 			
 			public abstract IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException;
 		}
+	}
+	
+	public static final class AmbientAudioSourceDeclaration implements ISerializable
+	{
+		public String audio;
+		public String behavior;
 		
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException
+		{
+			target.addChild("audio").setValue(audio);
+			
+			if(behavior != null)
+				target.addChild("behavior").setValue(behavior);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException
+		{
+			try
+			{
+				audio = source.getChild("audio").getValue(String.class);
+
+				if(source.childExists("behavior"))
+					behavior = source.getChild("behavior").getValue(String.class);
+				
+			} catch (NoSuchChildVariableException e)
+			{
+				throw new ValueSerializationException(e);
+			}
+		}
 	}
 	
 	public static final class LogicControllerDeclaration implements ISerializable
