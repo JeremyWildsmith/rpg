@@ -213,7 +213,7 @@ public final class RpgEntityFactory implements IEntityFactory
 					
 					IScriptBuilder behavior = entityFactory.m_scriptBuilderFactory.create(context.resolve(new URI(decl.behavior)));
 					IAudioClip source = entityFactory.m_audioClipFactory.create(context.resolve(new URI(decl.audio)));
-				
+					source.setVolume(decl.volume);
 					return new AmbientAudioSource(source, behavior, instanceName);
 				} catch (ValueSerializationException | AudioClipConstructionException | URISyntaxException | ScriptBuilderConstructionException e)
 				{
@@ -337,6 +337,7 @@ public final class RpgEntityFactory implements IEntityFactory
 	{
 		public String audio;
 		public String behavior;
+		public float volume;
 		
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException
@@ -345,6 +346,8 @@ public final class RpgEntityFactory implements IEntityFactory
 			
 			if(behavior != null)
 				target.addChild("behavior").setValue(behavior);
+			
+			target.addChild("volume").setValue(volume);
 		}
 
 		@Override
@@ -357,6 +360,7 @@ public final class RpgEntityFactory implements IEntityFactory
 				if(source.childExists("behavior"))
 					behavior = source.getChild("behavior").getValue(String.class);
 				
+				volume = source.getChild("volume").getValue(Double.class).floatValue();
 			} catch (NoSuchChildVariableException e)
 			{
 				throw new ValueSerializationException(e);
