@@ -202,7 +202,7 @@ public final class CharacterDialogueQueryFactory
 						{
 							speakerSceneBuffer.reset();
 							speakerSceneBuffer.addModel(query.getSpeaker().getModel(), new Vector3F());
-							speakerSceneBuffer.render(g, x, y, scale);
+							speakerSceneBuffer.render(g, x, y, scale, speakerView.getBounds());
 						}
 					});
 					

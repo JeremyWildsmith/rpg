@@ -19,7 +19,7 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.IDisposable;
-import io.github.jevaengine.graphics.ParticleEmitter;
+import io.github.jevaengine.graphics.IParticleEmitter;
 import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Rect3F;
@@ -54,7 +54,7 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	
 	private final List<IStatusSceneModelComponent> m_components = new ArrayList<>();
 	private final IAnimationSceneModel m_baseModel;
-	private final ParticleEmitter m_bloodEmitter;
+	private final IParticleEmitter m_bloodEmitter;
 	
 	private final IUIStyle m_statusStyle;
 	
@@ -63,7 +63,7 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	private int m_bleedLife = BLEED_LIFETIME;
 	private int m_healthGuageLife = HEALTH_GUAGE_LIFETIME;
 	
-	public StatusCompositedAnimationSceneModel(IAnimationSceneModel baseModel, IUIStyle statusStyle, ParticleEmitter bloodEmitter, IImmutableAttribute healthAttribute, IImmutableAttribute maxHealthAttribute)
+	public StatusCompositedAnimationSceneModel(IAnimationSceneModel baseModel, IUIStyle statusStyle, IParticleEmitter bloodEmitter, IImmutableAttribute healthAttribute, IImmutableAttribute maxHealthAttribute)
 	{
 		m_statusStyle = statusStyle;
 		m_baseModel = baseModel;
