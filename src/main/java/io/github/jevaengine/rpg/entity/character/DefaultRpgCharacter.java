@@ -48,8 +48,7 @@ import io.github.jevaengine.world.entity.IEntityTaskModel;
 import io.github.jevaengine.world.entity.WorldAssociationException;
 import io.github.jevaengine.world.entity.tasks.ITask;
 import io.github.jevaengine.world.pathfinding.AStarRouteFactory;
-import io.github.jevaengine.world.pathfinding.ClearanceRoutingRules;
-import io.github.jevaengine.world.pathfinding.DefaultRoutingRules;
+import io.github.jevaengine.world.pathfinding.EntityRoutingRules;
 import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
@@ -378,7 +377,9 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		
 		public void wonder(int radius)
 		{
-			getTaskModel().addTask(new WonderTask(new AStarRouteFactory(), new ClearanceRoutingRules(new DefaultRoutingRules(Direction.ALL_DIRECTIONS), m_body.getBoundingCircle().radius), radius));
+			getTaskModel().addTask(new WonderTask(
+								new AStarRouteFactory(),
+								new EntityRoutingRules(DefaultRpgCharacter.this, Direction.ALL_DIRECTIONS), radius));
 		}
 		
 		public void attack(EntityBridge target)
@@ -433,14 +434,14 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		
 		public void moveTo(Vector3F location, float arrivalTolorance, float waypointTolorance)
 		{
-			getTaskModel().addTask(new MovementTask(new AStarRouteFactory(), new ClearanceRoutingRules(new DefaultRoutingRules(Direction.ALL_DIRECTIONS), m_body.getBoundingCircle().radius), location.getXy(), arrivalTolorance, waypointTolorance, Integer.MAX_VALUE));
+			getTaskModel().addTask(new MovementTask(new AStarRouteFactory(), new EntityRoutingRules(DefaultRpgCharacter.this, Direction.ALL_DIRECTIONS), location.getXy(), arrivalTolorance, waypointTolorance, Integer.MAX_VALUE));
 		}
 		
 		public void moveTo(EntityBridge bridge)
 		{
 			IEntity owner = bridge.getEntity();
 			
-			getTaskModel().addTask(new FollowEntityTask(new AStarRouteFactory(), new ClearanceRoutingRules(new DefaultRoutingRules(Direction.ALL_DIRECTIONS), m_body.getBoundingCircle().radius), owner));
+			getTaskModel().addTask(new FollowEntityTask(new AStarRouteFactory(), new EntityRoutingRules(DefaultRpgCharacter.this, Direction.ALL_DIRECTIONS), owner));
 		}
 		
 		public boolean isConflictingAllegiance(EntityBridge otherBridge)

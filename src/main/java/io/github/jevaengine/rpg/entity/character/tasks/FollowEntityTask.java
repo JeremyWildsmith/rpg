@@ -79,7 +79,7 @@ public final class FollowEntityTask implements ITask
 
 	public void refreshRoute()
 	{
-		Route route = new Route();
+		Route route = new Route(m_routingRules);
 		
 		float arrivalTolorance = Float.MAX_VALUE;
 		

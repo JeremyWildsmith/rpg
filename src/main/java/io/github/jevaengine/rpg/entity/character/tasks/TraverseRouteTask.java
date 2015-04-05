@@ -46,7 +46,7 @@ public final class TraverseRouteTask implements ITask
 	public void setRoute(Route route, float arrivalTolorance, float waypointTolorance)
 	{
 		m_steeringBehavior = new SteeringBehaviorList(new ISteeringBehavior[] {
-				new TraverseRouteBehavior(1.0F, route.reduce(), arrivalTolorance, waypointTolorance),
+				new TraverseRouteBehavior(1.0F, route, arrivalTolorance, waypointTolorance),
 				new AvoidanceBehavior(waypointTolorance / 2)
 			});
 	}

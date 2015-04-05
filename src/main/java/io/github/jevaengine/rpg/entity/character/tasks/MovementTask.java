@@ -58,7 +58,7 @@ public final class MovementTask implements ITask
 	@Override
 	public void begin(IEntity entity)
 	{
-		Route route = new Route();
+		Route route = new Route(m_routingRules);
 		
 		try
 		{
