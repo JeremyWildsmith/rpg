@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 public final class FollowEntityTask implements ITask
 {
-	private static final float REFRESH_ROUTE_TARGET_MOVEMENT_DELTA = 0.6F;
+	private static final float REFRESH_ROUTE_INTERVAL = 1000;
 	private static final float WAYPOINT_TOLORANCE = 0.8F;
 	
 	private final Logger m_logger = LoggerFactory.getLogger(MovementTask.class);
@@ -48,6 +48,8 @@ public final class FollowEntityTask implements ITask
 	private Vector2F m_lastTargetLocation = new Vector2F();
 	
 	private IEntity m_host = new NullEntity();
+	
+	private int m_timeSinceRefresh = 0;
 	
 	public FollowEntityTask(IRouteFactory routeFactory, IRoutingRules routingRules, IEntity target)
 	{
@@ -79,13 +81,14 @@ public final class FollowEntityTask implements ITask
 
 	public void refreshRoute()
 	{
+		m_timeSinceRefresh = 0;
 		Route route = new Route(m_routingRules);
 		
 		float arrivalTolorance = Float.MAX_VALUE;
 		
 		if(m_target.get() != null)
 		{
-			arrivalTolorance = m_host.getBody().getBoundingCircle().radius + m_target.get().getBody().getBoundingCircle().radius + 0.01F;
+			arrivalTolorance = m_host.getBody().getBoundingCircle().radius;
 			
 			try
 			{
@@ -104,8 +107,8 @@ public final class FollowEntityTask implements ITask
 	{
 		if(m_target.get() == null)
 			return true;
-		
-		if(m_lastTargetLocation.difference(m_target.get().getBody().getLocation().getXy()).getLength() > REFRESH_ROUTE_TARGET_MOVEMENT_DELTA)
+	
+		if(m_timeSinceRefresh > REFRESH_ROUTE_INTERVAL && !m_lastTargetLocation.difference(m_target.get().getBody().getLocation().getXy()).isZero())
 			refreshRoute();
 		
 		return m_traverseRouteTask.doCycle(deltaTime);
