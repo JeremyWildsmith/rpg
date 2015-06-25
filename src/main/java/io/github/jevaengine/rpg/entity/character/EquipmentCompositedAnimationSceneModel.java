@@ -26,6 +26,7 @@ import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.world.Direction;
+import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.MergeAnimationSceneModel;
 
@@ -37,9 +38,11 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 {
 	private final MergeAnimationSceneModel m_modelMerge = new MergeAnimationSceneModel();
 	private final Map<IWieldTarget, IAnimationSceneModel> m_mergedEquipment = new HashMap<>();
+	private final IAnimationSceneModel m_base;
 	
 	public EquipmentCompositedAnimationSceneModel(IAnimationSceneModel base, ILoadout loadout)
 	{
+		m_base = base;
 		m_modelMerge.add(base);
 		loadout.getObservers().add(new LoadoutObserver());
 		
@@ -111,6 +114,12 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 	public Rect3F getAABB()
 	{
 		return m_modelMerge.getAABB();
+	}
+	
+	@Override
+	public PhysicsBodyShape getBodyShape()
+	{
+		return m_base.getBodyShape();
 	}
 
 	@Override

@@ -33,13 +33,13 @@ import java.util.ArrayList;
  */
 public final class DefaultInventory implements IItemStore
 {	
-	private ArrayList<DefaultItemSlot> m_inventory;
+	private final ArrayList<DefaultItemSlot> m_inventory;
 
-	private Observers m_observers = new Observers();
+	private final Observers m_observers = new Observers();
 
 	public DefaultInventory(int slotCount)
 	{
-		m_inventory = new ArrayList<DefaultItemSlot>(slotCount);
+		m_inventory = new ArrayList<>(slotCount);
 
 		for (int i = 0; i < slotCount; i++)
 			m_inventory.add(new DefaultItemSlot());

@@ -19,7 +19,7 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.IDisposable;
-import io.github.jevaengine.graphics.IParticleEmitter;
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Rect3F;
@@ -30,6 +30,7 @@ import io.github.jevaengine.ui.Label;
 import io.github.jevaengine.ui.ValueGuage;
 import io.github.jevaengine.ui.style.IUIStyle;
 import io.github.jevaengine.world.Direction;
+import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -166,6 +167,12 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	}
 
 	@Override
+	public PhysicsBodyShape getBodyShape()
+	{
+		return m_baseModel.getBodyShape();
+	}
+	
+	@Override
 	public IAnimationSceneModel clone()
 	{
 		return m_baseModel.clone();
@@ -295,7 +302,7 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 		@Override
 		public void render(Graphics2D g, int x, int y, float scale)
 		{
-			m_bloodEmitter.render(g, x, y, scale);
+		//	m_bloodEmitter.render(g, x, y, scale);
 		}
 	}
 	

@@ -30,6 +30,8 @@ import io.github.jevaengine.config.ImmutableVariableOverlay;
 import io.github.jevaengine.config.NoSuchChildVariableException;
 import io.github.jevaengine.config.NullVariable;
 import io.github.jevaengine.config.ValueSerializationException;
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory.CharacterCreationException;
@@ -42,10 +44,14 @@ import io.github.jevaengine.world.entity.DefaultEntityTaskModelFactory;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.entity.LogicController;
+import io.github.jevaengine.world.entity.ParticleDriver;
+import io.github.jevaengine.world.scene.model.ISceneModelFactory;
+import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 
 import javax.inject.Inject;
 
@@ -57,6 +63,7 @@ public final class RpgEntityFactory implements IEntityFactory
 	private final Logger m_logger = LoggerFactory.getLogger(RpgEntityFactory.class);
 	private static final AtomicInteger m_unnamedEntityCount = new AtomicInteger();
 	
+	private final IParticleEmitterFactory m_particleEmitterFactory;
 	private final IScriptBuilderFactory m_scriptBuilderFactory;
 	private final IAudioClipFactory m_audioClipFactory;
 	private final IConfigurationFactory m_configurationFactory;
@@ -64,12 +71,13 @@ public final class RpgEntityFactory implements IEntityFactory
 	
 	@Inject
 	public RpgEntityFactory(IScriptBuilderFactory scriptBuilderFactory, IAudioClipFactory audioClipFactory, IConfigurationFactory configurationFactory,
-			IRpgCharacterFactory characterFactory)
+			IRpgCharacterFactory characterFactory, IParticleEmitterFactory particleEmitterFactory)
 	{
 		m_scriptBuilderFactory = scriptBuilderFactory;
 		m_audioClipFactory = audioClipFactory;
 		m_configurationFactory = configurationFactory;
 		m_characterFactory = characterFactory;
+		m_particleEmitterFactory = particleEmitterFactory;
 	}
 	
 	@Override
@@ -203,6 +211,22 @@ public final class RpgEntityFactory implements IEntityFactory
 	
 	private enum RpgEntity
 	{
+		ParticleDriver(ParticleDriver.class, "particleDriver", new EntityBuilder() {
+			@Override
+			public IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException
+			{
+				try
+				{
+					ParticleDriverDeclaration decl = auxConfig.getValue(ParticleDriverDeclaration.class);
+					IParticleEmitter emitter = entityFactory.m_particleEmitterFactory.create(context.resolve(decl.particle));
+					return new ParticleDriver(instanceName, emitter);
+				} catch (SceneModelConstructionException | ValueSerializationException e)
+				{
+					throw new EntityConstructionException(e);
+				}
+			}
+		}),
+		
 		AmbientAudioSource(AmbientAudioSource.class, "ambientAudioSource", new EntityBuilder() {
 		@Override
 			public IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException
@@ -331,6 +355,31 @@ public final class RpgEntityFactory implements IEntityFactory
 			
 			public abstract IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException;
 		}
+	}
+	
+	public static final class ParticleDriverDeclaration implements ISerializable
+	{
+		public String particle;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException
+		{
+			target.addChild("particle").setValue(particle);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException
+		{
+			try
+			{
+				particle = source.getChild("particle").getValue(String.class);
+			} catch (NoSuchChildVariableException ex)
+			{
+				throw new ValueSerializationException(ex);
+			}
+		}
+		
+		
 	}
 	
 	public static final class AmbientAudioSourceDeclaration implements ISerializable
