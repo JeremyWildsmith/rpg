@@ -18,7 +18,6 @@
  */
 package io.github.jevaengine.rpg.entity;
 
-import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.script.IFunctionFactory;
@@ -40,12 +39,10 @@ import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.NullSceneModel;
 import io.github.jevaengine.world.search.RectangleSearchFilter;
 import java.net.URI;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

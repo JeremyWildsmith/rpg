@@ -20,7 +20,6 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
-import io.github.jevaengine.util.Observers;
 
 /**
  *

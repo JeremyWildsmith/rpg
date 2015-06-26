@@ -20,12 +20,11 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.rpg.item.DefaultItemSlot;
 import io.github.jevaengine.rpg.item.IItem;
-import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
+import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
-
 import java.util.Collection;
 import java.util.HashMap;
 

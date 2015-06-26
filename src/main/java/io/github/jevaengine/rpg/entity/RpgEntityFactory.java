@@ -30,8 +30,6 @@ import io.github.jevaengine.config.ImmutableVariableOverlay;
 import io.github.jevaengine.config.NoSuchChildVariableException;
 import io.github.jevaengine.config.NullVariable;
 import io.github.jevaengine.config.ValueSerializationException;
-import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
-import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory.CharacterCreationException;
@@ -45,16 +43,13 @@ import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.entity.LogicController;
 import io.github.jevaengine.world.entity.ParticleDriver;
-import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
-
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

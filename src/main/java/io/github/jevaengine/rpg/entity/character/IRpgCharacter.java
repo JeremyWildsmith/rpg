@@ -18,8 +18,6 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
-import io.github.jevaengine.rpg.AttributeSet;
-import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.entity.character.IAllegianceResolver.NullAllegianceResolver;
 import io.github.jevaengine.rpg.entity.character.ICombatResolver.NullCombatResolver;
 import io.github.jevaengine.rpg.entity.character.IDialogueResolver.NullDialogueResolver;
@@ -39,7 +37,6 @@ import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.NullSceneModel;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -23,13 +23,13 @@ import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
 import io.github.jevaengine.rpg.entity.character.tasks.AttackTask;
-import io.github.jevaengine.rpg.entity.character.tasks.SpeakToTask;
 import io.github.jevaengine.rpg.entity.character.tasks.FollowEntityTask;
 import io.github.jevaengine.rpg.entity.character.tasks.ListenToTask;
 import io.github.jevaengine.rpg.entity.character.tasks.MovementTask;
 import io.github.jevaengine.rpg.entity.character.tasks.NarrateTask;
 import io.github.jevaengine.rpg.entity.character.tasks.SearchForTask;
 import io.github.jevaengine.rpg.entity.character.tasks.SearchForTask.ISearchListener;
+import io.github.jevaengine.rpg.entity.character.tasks.SpeakToTask;
 import io.github.jevaengine.rpg.entity.character.tasks.WonderTask;
 import io.github.jevaengine.rpg.item.IImmutableItemStore;
 import io.github.jevaengine.rpg.item.IItemStore;
@@ -58,10 +58,8 @@ import io.github.jevaengine.world.scene.model.ISceneModel;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

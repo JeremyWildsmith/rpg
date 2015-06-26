@@ -19,7 +19,6 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.IDisposable;
-import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Rect3F;
@@ -32,6 +31,7 @@ import io.github.jevaengine.ui.style.IUIStyle;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
+import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;

@@ -39,7 +39,6 @@ import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.scene.ISceneBuffer;
 import io.github.jevaengine.world.scene.ISceneBufferFactory;
-
 import java.awt.Graphics2D;
 import java.net.URI;
 

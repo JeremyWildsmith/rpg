@@ -18,8 +18,8 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
-import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IImmutableItemSlot;
+import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;

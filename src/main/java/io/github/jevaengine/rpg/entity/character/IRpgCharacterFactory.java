@@ -19,7 +19,6 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.config.IImmutableVariable;
-
 import java.net.URI;
 
 public interface IRpgCharacterFactory

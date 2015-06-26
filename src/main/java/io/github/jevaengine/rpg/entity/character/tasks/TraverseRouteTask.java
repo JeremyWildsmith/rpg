@@ -28,7 +28,6 @@ import io.github.jevaengine.world.entity.IEntity.NullEntity;
 import io.github.jevaengine.world.entity.tasks.ITask;
 import io.github.jevaengine.world.entity.tasks.InvalidTaskHostException;
 import io.github.jevaengine.world.pathfinding.Route;
-import io.github.jevaengine.world.steering.AvoidanceBehavior;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
 import io.github.jevaengine.world.steering.ISteeringBehavior.NullSteeringBehavior;
 import io.github.jevaengine.world.steering.SteeringBehaviorList;
@@ -46,8 +45,7 @@ public final class TraverseRouteTask implements ITask
 	public void setRoute(Route route, float arrivalTolorance, float waypointTolorance)
 	{
 		m_steeringBehavior = new SteeringBehaviorList(new ISteeringBehavior[] {
-				new TraverseRouteBehavior(1.0F, route, arrivalTolorance, waypointTolorance),
-				new AvoidanceBehavior(waypointTolorance / 2)
+				new TraverseRouteBehavior(1.0F, route, arrivalTolorance, waypointTolorance)
 			});
 	}
 	

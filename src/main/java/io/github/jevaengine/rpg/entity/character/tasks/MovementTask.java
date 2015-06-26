@@ -25,7 +25,6 @@ import io.github.jevaengine.world.pathfinding.IRouteFactory;
 import io.github.jevaengine.world.pathfinding.IRoutingRules;
 import io.github.jevaengine.world.pathfinding.IncompleteRouteException;
 import io.github.jevaengine.world.pathfinding.Route;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

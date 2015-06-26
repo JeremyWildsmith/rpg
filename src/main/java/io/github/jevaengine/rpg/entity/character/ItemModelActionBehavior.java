@@ -19,14 +19,13 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.rpg.item.IImmutableItemSlot;
-import io.github.jevaengine.rpg.item.IItem.IItemFunction;
 import io.github.jevaengine.rpg.item.IImmutableItemSlot.IItemSlotObserver;
+import io.github.jevaengine.rpg.item.IItem.IItemFunction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.IAnimationSceneModelAnimation;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.IAnimationSceneModelAnimationObserver;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.NullAnimationSceneModelAnimation;
 import io.github.jevaengine.world.scene.model.action.DefaultActionModel.IDefaultActionModelBehavior;
-
 import java.util.HashMap;
 import java.util.Map;
 

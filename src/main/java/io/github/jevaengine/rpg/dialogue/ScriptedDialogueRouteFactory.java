@@ -34,7 +34,6 @@ import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.script.IScriptBuilderFactory.ScriptBuilderConstructionException;
 import io.github.jevaengine.script.NullScriptBuilder;
 import io.github.jevaengine.util.Nullable;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -42,9 +41,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
