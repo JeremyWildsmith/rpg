@@ -46,7 +46,7 @@ public final class WonderTask implements ITask
 	{
 		Route route = m_routeFactory.create(m_routingRules, entity.getWorld(), entity.getBody().getLocation().getXy(), m_wonderRadius);
 
-		m_traverseRouteTask.setRoute(route, TRAVERSE_TOLORANCE, TRAVERSE_TOLORANCE);
+		m_traverseRouteTask.setRoute(route, TRAVERSE_TOLORANCE);
 		m_traverseRouteTask.begin(entity);
 	}
 

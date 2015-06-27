@@ -39,18 +39,16 @@ public final class MovementTask implements ITask
 	private final Vector2F m_destination;
 	
 	private final float m_arrivalTolorance;
-	private final float m_waypointTolorance;
 	
 	private final int m_maxSteps;
 	
-	public MovementTask(IRouteFactory routeFactory, IRoutingRules routingRules, Vector2F destination, float arrivalTolorance, float waypointTolorance, int maxSteps)
+	public MovementTask(IRouteFactory routeFactory, IRoutingRules routingRules, Vector2F destination, float arrivalTolorance, int maxSteps)
 	{
 		m_traverseRouteTask = new TraverseRouteTask();
 		m_routeFactory = routeFactory;
 		m_routingRules = routingRules;
 		m_destination = new Vector2F(destination);
 		m_arrivalTolorance = arrivalTolorance;
-		m_waypointTolorance = waypointTolorance;
 		m_maxSteps = maxSteps;
 	}
 	
@@ -67,7 +65,7 @@ public final class MovementTask implements ITask
 			m_logger.error(String.format("Unable to constuct path to %f, %f for entity %s.", m_destination.x, m_destination.y, entity.getInstanceName()));
 		}
 		
-		m_traverseRouteTask.setRoute(route, m_arrivalTolorance, m_waypointTolorance);
+		m_traverseRouteTask.setRoute(route, m_arrivalTolorance);
 		
 		m_traverseRouteTask.begin(entity);
 	}

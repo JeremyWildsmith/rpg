@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 public final class FollowEntityTask implements ITask
 {
 	private static final float REFRESH_ROUTE_INTERVAL = 1000;
-	private static final float WAYPOINT_TOLORANCE = 0.8F;
 	
 	private final Logger m_logger = LoggerFactory.getLogger(MovementTask.class);
 	
@@ -97,7 +96,7 @@ public final class FollowEntityTask implements ITask
 			}
 		}
 		
-		m_traverseRouteTask.setRoute(route, arrivalTolorance, WAYPOINT_TOLORANCE);
+		m_traverseRouteTask.setRoute(route, arrivalTolorance);
 	}
 	
 	@Override

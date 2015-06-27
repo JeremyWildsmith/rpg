@@ -42,10 +42,10 @@ public final class TraverseRouteTask implements ITask
 	
 	private boolean m_isCancel = false;
 	
-	public void setRoute(Route route, float arrivalTolorance, float waypointTolorance)
+	public void setRoute(Route route, float arrivalTolorance)
 	{
 		m_steeringBehavior = new SteeringBehaviorList(new ISteeringBehavior[] {
-				new TraverseRouteBehavior(1.0F, route, arrivalTolorance, waypointTolorance)
+				new TraverseRouteBehavior(1.0F, route, arrivalTolorance)
 			});
 	}
 	

@@ -432,7 +432,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		
 		public void moveTo(Vector3F location, float arrivalTolorance, float waypointTolorance)
 		{
-			getTaskModel().addTask(new MovementTask(new AStarRouteFactory(), new EntityRoutingRules(DefaultRpgCharacter.this, Direction.ALL_DIRECTIONS), location.getXy(), arrivalTolorance, waypointTolorance, Integer.MAX_VALUE));
+			getTaskModel().addTask(new MovementTask(new AStarRouteFactory(), new EntityRoutingRules(DefaultRpgCharacter.this, Direction.ALL_DIRECTIONS), location.getXy(), arrivalTolorance, Integer.MAX_VALUE));
 		}
 		
 		public void moveTo(EntityBridge bridge)
