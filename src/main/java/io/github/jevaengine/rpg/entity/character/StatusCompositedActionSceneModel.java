@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -87,7 +88,7 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 	{
 		Label lbl = new Label(message);
 		lbl.setStyle(m_statusStyle);
-		StatusMessageComponent c = new StatusMessageComponent(lbl);
+		StatusMessageComponent c = new StatusMessageComponent(lbl, m_baseModel.getAABB());
 		m_components.add(c);
 	}
 	
@@ -308,14 +309,20 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		}
 	}
 	
-	private final class StatusMessageComponent implements IStatusSceneModelComponent, IDisposable
+	private static final class StatusMessageComponent implements IStatusSceneModelComponent, IDisposable
 	{
+		private static final AtomicInteger COUNT = new AtomicInteger();
+		private final String m_name = getClass().getName() + COUNT.getAndIncrement();
+		
 		private final Label m_label;
 		private int m_life = 0;
 		
-		public StatusMessageComponent(Label label)
+		private final Rect3F m_baseAABB;
+		
+		public StatusMessageComponent(Label label, Rect3F baseAABB)
 		{
 			m_label = label;
+			m_baseAABB = new Rect3F(baseAABB);
 		}
 
 		@Override
@@ -341,7 +348,7 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		@Override
 		public String getName()
 		{
-			return StatusMessageComponent.class.getName();
+			return m_name;
 		}
 
 		@Override
@@ -359,11 +366,10 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		@Override
 		public Vector3F getOrigin()
 		{
-			Rect3F baseBounds = m_baseModel.getAABB();
-			float destDepth = baseBounds.depth;
-			return new Vector3F(baseBounds.x + baseBounds.width / 2,
-												baseBounds.y + baseBounds.height / 2,
-												baseBounds.depth + destDepth * ((float)m_life / MESSAGE_LIFETIME));
+			float destDepth = m_baseAABB.depth;
+			return new Vector3F(m_baseAABB.x + m_baseAABB.width / 2,
+												m_baseAABB.y + m_baseAABB.height / 2,
+												m_baseAABB.depth + destDepth * ((float)m_life / MESSAGE_LIFETIME));
 		
 		}
 
