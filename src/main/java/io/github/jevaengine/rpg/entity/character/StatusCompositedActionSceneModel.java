@@ -30,7 +30,8 @@ import io.github.jevaengine.ui.ValueGuage;
 import io.github.jevaengine.ui.style.IUIStyle;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.ISceneModel;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -43,7 +44,7 @@ import java.util.ListIterator;
  *
  * @author Jeremy
  */
-public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel, IDisposable
+public class StatusCompositedActionSceneModel implements IActionSceneModel, IDisposable
 {
 	private static final int MESSAGE_LIFETIME = 1000;
 	private static final int HEALTH_GUAGE_LIFETIME = 2000;
@@ -54,7 +55,7 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	private final HealthAttributeObserver m_healthObserver;
 	
 	private final List<IStatusSceneModelComponent> m_components = new ArrayList<>();
-	private final IAnimationSceneModel m_baseModel;
+	private final IActionSceneModel m_baseModel;
 	private final IParticleEmitter m_bloodEmitter;
 	
 	private final IUIStyle m_statusStyle;
@@ -64,7 +65,7 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	private int m_bleedLife = BLEED_LIFETIME;
 	private int m_healthGuageLife = HEALTH_GUAGE_LIFETIME;
 	
-	public StatusCompositedAnimationSceneModel(IAnimationSceneModel baseModel, IUIStyle statusStyle, IParticleEmitter bloodEmitter, IImmutableAttribute healthAttribute, IImmutableAttribute maxHealthAttribute)
+	public StatusCompositedActionSceneModel(IActionSceneModel baseModel, IUIStyle statusStyle, IParticleEmitter bloodEmitter, IImmutableAttribute healthAttribute, IImmutableAttribute maxHealthAttribute)
 	{
 		m_statusStyle = statusStyle;
 		m_baseModel = baseModel;
@@ -173,22 +174,23 @@ public class StatusCompositedAnimationSceneModel implements IAnimationSceneModel
 	}
 	
 	@Override
-	public IAnimationSceneModel clone()
+	public ISceneModel clone()
 	{
 		return m_baseModel.clone();
 	}
 
 	@Override
-	public IAnimationSceneModelAnimation getAnimation(String name)
+	public IActionSceneModelAction getAction(String name)
 	{
-		return m_baseModel.getAnimation(name);
+		return m_baseModel.getAction(name);
 	}
 
 	@Override
-	public boolean hasAnimation(String name)
+	public boolean hasAction(String name)
 	{
-		return m_baseModel.hasAnimation(name);
+		return m_baseModel.hasAction(name);
 	}
+	
 	
 	private interface IStatusSceneModelComponent extends ISceneModelComponent, IDisposable
 	{

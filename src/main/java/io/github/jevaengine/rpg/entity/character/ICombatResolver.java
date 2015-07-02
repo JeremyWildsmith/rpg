@@ -21,8 +21,10 @@ package io.github.jevaengine.rpg.entity.character;
 import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
-public interface ICombatResolver
+public interface ICombatResolver extends IRpgCharacterMechanicResolver
 {
 	void attack(IRpgCharacter reciever, IAttackObserver observer);
 	void attack(IRpgCharacter reciever);
@@ -79,6 +81,15 @@ public interface ICombatResolver
 		{
 			return new NullObservers();
 		}
+		
+		@Override
+		public IActionSceneModel decorate(IActionSceneModel subject)
+		{
+			return subject;
+		}
+		
+		@Override
+		public void update(int deltaTime) { }
 	}
 	
 	public static final class AttackAbilityTestResults

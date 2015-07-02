@@ -18,7 +18,10 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
-public interface IAllegianceResolver
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
+
+public interface IAllegianceResolver extends IRpgCharacterMechanicResolver
 {
 	boolean isConflictingAllegiance(IRpgCharacter subject);
 	
@@ -28,6 +31,17 @@ public interface IAllegianceResolver
 		public boolean isConflictingAllegiance(IRpgCharacter subject)
 		{
 			return false;
+		}
+
+		@Override
+		public void update(int deltaTime) {
+			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		}
+
+		@Override
+		public IActionSceneModel decorate(IActionSceneModel subject)
+		{
+			return subject;
 		}
 	}
 }

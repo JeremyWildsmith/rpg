@@ -25,8 +25,10 @@ import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
 import io.github.jevaengine.rpg.dialogue.IDialogueSpeakerSession;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
-public interface IDialogueResolver
+public interface IDialogueResolver extends IRpgCharacterMechanicResolver
 {
 	DialogueSession speak(IRpgCharacter listener);
 	IDialogueListenerSession listen(IRpgCharacter speaker);
@@ -73,5 +75,14 @@ public interface IDialogueResolver
 		{
 			return new NullObservers();
 		}
+		
+		@Override
+		public IActionSceneModel decorate(IActionSceneModel subject)
+		{
+			return subject;
+		}
+		
+		@Override
+		public void update(int deltaTime) { }
 	}
 }

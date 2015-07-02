@@ -53,6 +53,7 @@ import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 import java.net.URI;
@@ -74,11 +75,14 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	private final AttributeSet m_attributes;
 	
 	private final ICombatResolver m_combatResolver;
+	private final ISpellCastResolver m_spellCastResolver;
 	private final IDialogueResolver m_dialogueResolver;
 	private final IMovementResolver m_movementResolver;
 	private final IVisionResolver m_visionResolver;
 	private final IAllegianceResolver m_allegianceResolver;
 	private final IStatusResolver m_statusResolver;
+	
+	private final IRpgCharacterMechanicResolver m_resolvers[];
 	
 	private final IItemStore m_inventory;
 	private final ILoadout m_loadout;
@@ -101,6 +105,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 						AttributeSet attributes,
 						IStatusResolverFactory statusResolver,
 						ICombatResolverFactory combatResolver,
+						ISpellCastResolverFactory spellCastResolver,
 						IDialogueResolverFactory dialogueResolver,
 						IMovementResolverFactory movementResolver,
 						IVisionResolverFactory visionResolver,
@@ -122,16 +127,31 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		m_taskModel = new DefaultEntityTaskModel(this);
 	
 		m_attributes = attributes;
-			
-		m_model = model;
 		
 		m_dialogueResolver = dialogueResolver.create(this, m_attributes, model);
 		m_statusResolver = statusResolver.create(this, m_attributes, model);
+		m_spellCastResolver = spellCastResolver.create(this, attributes, model);
 		m_combatResolver = combatResolver.create(this, m_attributes, model);
 		m_movementResolver = movementResolver.create(this, m_attributes, model);
 		m_visionResolver = visionResolver.create(this, m_attributes, model);
 		m_allegianceResolver = allegianceResolver.create(this, attributes, model);
 	
+		m_resolvers = new IRpgCharacterMechanicResolver[] {
+			m_dialogueResolver,
+			m_statusResolver,
+			m_spellCastResolver,
+			m_combatResolver,
+			m_movementResolver,
+			m_visionResolver,
+			m_allegianceResolver
+		};
+		
+		IActionSceneModel initialModel = model;
+		for(IRpgCharacterMechanicResolver r : m_resolvers)
+			initialModel = r.decorate(initialModel);
+		
+		m_model = initialModel;
+		
 		m_bridge = new RpgCharacterBridge(scriptBuilder.getFunctionFactory(), scriptBuilder.getUri());
 		
 		try
@@ -194,6 +214,12 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	public ICombatResolver getCombatResolver()
 	{
 		return m_combatResolver;
+	}
+	
+	@Override
+	public ISpellCastResolver getSpellCastResolver()
+	{
+		return m_spellCastResolver;
 	}
 
 	@Override
@@ -304,7 +330,10 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	public void update(int delta)
 	{
 		m_taskModel.update(delta);
-		m_movementResolver.update(delta);
+		
+		for(IRpgCharacterMechanicResolver r : m_resolvers)
+			r.update(delta);
+		
 		m_model.update(delta);
 	}
 	

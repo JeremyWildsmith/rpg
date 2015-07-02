@@ -78,7 +78,6 @@ public final class FollowEntityTask implements ITask
 
 	public void refreshRoute()
 	{
-		m_timeSinceRefresh = 0;
 		Route route = new Route(m_routingRules);
 		
 		float arrivalTolorance = Float.MAX_VALUE;
@@ -105,9 +104,13 @@ public final class FollowEntityTask implements ITask
 		if(m_target.get() == null)
 			return true;
 	
+		m_timeSinceRefresh += deltaTime;
 		if(m_timeSinceRefresh > REFRESH_ROUTE_INTERVAL && !m_lastTargetLocation.difference(m_target.get().getBody().getLocation().getXy()).isZero())
+		{
+			m_timeSinceRefresh = 0;
 			refreshRoute();
-		
+		}
+			
 		return m_traverseRouteTask.doCycle(deltaTime);
 	}
 

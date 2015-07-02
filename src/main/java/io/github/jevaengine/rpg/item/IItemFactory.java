@@ -32,6 +32,5 @@ public interface IItemFactory
 		{
 			super("Error constructing item " + assetName.toString(), cause);
 		}
-		
 	}
 }

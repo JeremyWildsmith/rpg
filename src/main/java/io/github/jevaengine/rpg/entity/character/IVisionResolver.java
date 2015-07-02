@@ -19,8 +19,10 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.world.entity.IEntity;
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
-public interface IVisionResolver
+public interface IVisionResolver extends IRpgCharacterMechanicResolver
 {
 	IEntity[] getVisibleEntities();
 	
@@ -31,5 +33,14 @@ public interface IVisionResolver
 		{
 			return new IEntity[0];
 		}
+		
+		@Override
+		public IActionSceneModel decorate(IActionSceneModel subject)
+		{
+			return subject;
+		}
+		
+		@Override
+		public void update(int deltaTime) { }
 	}
 }

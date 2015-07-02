@@ -18,15 +18,15 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
 
-public interface IMovementResolver
+public interface IMovementResolver extends IRpgCharacterMechanicResolver
 {
 	void queue(IMovementDirector director);
 	void queueTop(IMovementDirector director);
 	void dequeue(IMovementDirector director);
-	
-	void update(int deltaTime);
 	
 	public interface IMovementDirector
 	{
@@ -47,5 +47,11 @@ public interface IMovementResolver
 		
 		@Override
 		public void update(int deltaTime) { }
+		
+		@Override
+		public IActionSceneModel decorate(IActionSceneModel subject)
+		{
+			return subject;
+		}
 	}
 }

@@ -20,12 +20,14 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
+import io.github.jevaengine.world.scene.model.IActionSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 /**
  *
  * @author Jeremy
  */
-public interface IStatusResolver
+public interface IStatusResolver extends IRpgCharacterMechanicResolver
 {
 	boolean isDead();
 	
@@ -50,5 +52,14 @@ public interface IStatusResolver
 		{
 			return new NullObservers();
 		}
+		
+		@Override
+		public IActionSceneModel decorate(IActionSceneModel subject)
+		{
+			return subject;
+		}
+		
+		@Override
+		public void update(int deltaTime) { }
 	}
 }

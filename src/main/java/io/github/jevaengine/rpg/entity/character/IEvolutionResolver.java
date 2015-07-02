@@ -22,7 +22,7 @@ import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.util.IObserverRegistry;
 
 
-public interface IEvolutionResolver
+public interface IEvolutionResolver extends IRpgCharacterMechanicResolver
 {
 	IObserverRegistry getObservers();
 	

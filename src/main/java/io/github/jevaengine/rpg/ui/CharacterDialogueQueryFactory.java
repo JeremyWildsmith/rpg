@@ -20,6 +20,7 @@ package io.github.jevaengine.rpg.ui;
 
 import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.graphics.IRenderable;
+import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.dialogue.DialogueSession.DialogueQuery;
@@ -117,6 +118,11 @@ public final class CharacterDialogueQueryFactory
 		{
 			return m_observers;
 		}
+		
+		public Rect2D getBounds()
+		{
+			return m_window.getBounds();
+		}
 	}
 
 	public interface ICharacterDialogueQuerySessionObserver
@@ -149,7 +155,6 @@ public final class CharacterDialogueQueryFactory
 					getControl(Button.class, "btnAnswer1"),
 					getControl(Button.class, "btnAnswer2"),
 					getControl(Button.class, "btnAnswer3"),
-					getControl(Button.class, "btnAnswer4"),
 			};
 			
 			final Button btnMoreAnswers = getControl(Button.class, "btnMoreAnswer");
@@ -201,7 +206,7 @@ public final class CharacterDialogueQueryFactory
 						{
 							speakerSceneBuffer.reset();
 							speakerSceneBuffer.addModel(query.getSpeaker().getModel(), new Vector3F());
-							speakerSceneBuffer.render(g, x, y, scale, speakerView.getBounds());
+							speakerSceneBuffer.render(g, x + speakerView.getBounds().width / 2, y + speakerView.getBounds().height / 2, scale, speakerView.getBounds());
 						}
 					});
 					
