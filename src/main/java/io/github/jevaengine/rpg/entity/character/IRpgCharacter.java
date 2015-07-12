@@ -25,7 +25,7 @@ import io.github.jevaengine.rpg.entity.character.IMovementResolver.NullMovementR
 import io.github.jevaengine.rpg.entity.character.ISpellCastResolver.NullSpellCastResolver;
 import io.github.jevaengine.rpg.entity.character.IStatusResolver.NullStatusResolver;
 import io.github.jevaengine.rpg.entity.character.IVisionResolver.NullVisionResolver;
-import io.github.jevaengine.rpg.item.IImmutableItemStore;
+import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
 import io.github.jevaengine.util.Nullable;
@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public interface IRpgCharacter extends IEntity
 {	
-	IImmutableItemStore getInventory();
-	IImmutableLoadout getLoadout();
+	IItemStore getInventory();
+	ILoadout getLoadout();
 	
 	IStatusResolver getStatusResolver();
 	ICombatResolver getCombatResolver();
@@ -155,13 +155,13 @@ public interface IRpgCharacter extends IEntity
 		public void update(int delta) { }
 
 		@Override
-		public IImmutableItemStore getInventory()
+		public IItemStore getInventory()
 		{
 			return new DefaultInventory(0);
 		}
 
 		@Override
-		public IImmutableLoadout getLoadout()
+		public ILoadout getLoadout()
 		{
 			return new DefaultLoadout();
 		}

@@ -31,7 +31,6 @@ import io.github.jevaengine.rpg.entity.character.tasks.SearchForTask;
 import io.github.jevaengine.rpg.entity.character.tasks.SearchForTask.ISearchListener;
 import io.github.jevaengine.rpg.entity.character.tasks.SpeakToTask;
 import io.github.jevaengine.rpg.entity.character.tasks.WonderTask;
-import io.github.jevaengine.rpg.item.IImmutableItemStore;
 import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.script.IFunctionFactory;
 import io.github.jevaengine.script.IScriptBuilder;
@@ -53,7 +52,6 @@ import io.github.jevaengine.world.physics.IPhysicsBody;
 import io.github.jevaengine.world.physics.NullPhysicsBody;
 import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 import java.net.URI;
@@ -193,13 +191,13 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	}
 	
 	@Override
-	public IImmutableItemStore getInventory()
+	public IItemStore getInventory()
 	{
 		return m_inventory;
 	}
 
 	@Override
-	public IImmutableLoadout getLoadout()
+	public ILoadout getLoadout()
 	{
 		return m_loadout;
 	}

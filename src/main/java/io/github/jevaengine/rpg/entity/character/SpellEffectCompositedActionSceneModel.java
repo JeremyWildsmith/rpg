@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public final class SpellEffectCompositedActionSceneModel implements IActionSceneModel, IDisposable
@@ -88,12 +89,14 @@ public final class SpellEffectCompositedActionSceneModel implements IActionScene
 	{
 		ArrayList<IImmutableSpellImpactController> spellImpacts = new ArrayList<>(m_mergedImpacts.keySet());
 		
-		Iterator<IImmutableSpellImpactController> it = spellImpacts.iterator();
-		while(it.hasNext())
-		{
-			if(!it.next().isPersisting())
-				it.remove();
-		}
+		List<IImmutableSpellImpactController> remove = new ArrayList<>();
+		
+		for(IImmutableSpellImpactController c : m_mergedImpacts.keySet())
+			if(!c.isPersisting())
+				remove.add(c);
+		
+		for(IImmutableSpellImpactController c : remove)
+			removeImpact(c);
 		
 		m_modelMerge.update(deltaTime);
 	}

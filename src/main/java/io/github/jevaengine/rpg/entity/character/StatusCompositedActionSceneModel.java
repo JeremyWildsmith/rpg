@@ -47,8 +47,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class StatusCompositedActionSceneModel implements IActionSceneModel, IDisposable
 {
-	private static final int MESSAGE_LIFETIME = 1000;
-	private static final int HEALTH_GUAGE_LIFETIME = 2000;
+	private static final int MESSAGE_LIFETIME = 3000;
+	private static final int HEALTH_GUAGE_LIFETIME = 6000;
 	private static final int BLEED_LIFETIME = 500;
 	
 	private final IImmutableAttribute m_healthAttribute;
@@ -78,7 +78,7 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		m_healthGuage.setStyle(statusStyle);
 		
 		m_components.add(new HealthGuageComponent());
-		m_components.add(new BloodComponent());
+		m_components.add(new BloodComponent(baseModel.getAABB()));
 		
 		m_healthObserver = new HealthAttributeObserver();
 		m_healthAttribute.getObservers().add(m_healthObserver);
@@ -257,8 +257,15 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		}
 	}
 	
-	private final class BloodComponent implements IStatusSceneModelComponent
+	private static final class BloodComponent implements IStatusSceneModelComponent
 	{
+		private final Rect3F m_baseAABB;
+		
+		public BloodComponent(Rect3F baseAABB)
+		{
+			m_baseAABB = baseAABB;
+		}
+		
 		@Override
 		public void dispose() { }
 		
@@ -283,11 +290,9 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		@Override
 		public Rect3F getBounds()
 		{
-			Rect3F baseBounds = m_baseModel.getAABB();
-			
-			return new Rect3F(baseBounds.getPoint(1.0F, 1.0F, 1.1F),
-												baseBounds.width,
-												baseBounds.height,
+			return new Rect3F(m_baseAABB.getPoint(1.0F, 1.0F, 1.1F),
+												m_baseAABB.width,
+												m_baseAABB.height,
 												0.1F);
 		
 		}
@@ -295,10 +300,9 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		@Override
 		public Vector3F getOrigin()
 		{
-			Rect3F baseBounds = m_baseModel.getAABB();
-			return new Vector3F(baseBounds.width / 2.0F,
-												baseBounds.height / 2.0F,
-												baseBounds.depth * 0.5F);
+			return new Vector3F(m_baseAABB.width / 2.0F,
+												m_baseAABB.height / 2.0F,
+												m_baseAABB.depth * 0.5F);
 		
 		}
 
