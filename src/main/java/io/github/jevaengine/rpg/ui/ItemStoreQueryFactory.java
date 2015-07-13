@@ -32,8 +32,6 @@ import io.github.jevaengine.ui.NoSuchControlException;
 import io.github.jevaengine.ui.Window;
 import io.github.jevaengine.ui.WindowBehaviourInjector;
 import io.github.jevaengine.ui.WindowManager;
-import io.github.jevaengine.util.IObserverRegistry;
-import io.github.jevaengine.util.Observers;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,25 +51,21 @@ public final class ItemStoreQueryFactory
 	}
 	
 	public ItemStoreQuery create(IItemStore store) throws WindowConstructionException
-	{
-		Observers observers = new Observers();
-		
-		Window window = m_windowFactory.create(m_inventoryLayout, new CharacterInventoryQueryBehaviourInjector(observers, store));
+	{	
+		Window window = m_windowFactory.create(m_inventoryLayout, new CharacterInventoryQueryBehaviourInjector(store));
 		m_windowManager.addWindow(window);
 
 		window.center();
 		
-		return new ItemStoreQuery(observers, window);
+		return new ItemStoreQuery(window);
 	}
 	
 	public static class ItemStoreQuery implements IDisposable
 	{
-		private final Observers m_observers;
 		private final Window m_window;
 		
-		private ItemStoreQuery(Observers observers, Window window)
+		private ItemStoreQuery(Window window)
 		{
-			m_observers = observers;
 			m_window = window;
 		}
 		
@@ -116,32 +110,20 @@ public final class ItemStoreQueryFactory
 			m_window.setTopMost(isTopMost);
 		}
 		
-		public IObserverRegistry getObservers()
-		{
-			return m_observers;
-		}
-		
 		public Rect2D getBounds()
 		{
 			return m_window.getBounds();
 		}
 	}
 
-	public interface ICharacterDialogueQuerySessionObserver
-	{
-		void sessionEnded();
-	}
-	
 	private class CharacterInventoryQueryBehaviourInjector extends WindowBehaviourInjector
 	{
-		private final Observers m_observers;
 		private final IItemStore m_itemStore;
 		
 		private int m_itemPage = 0;
 		
-		public CharacterInventoryQueryBehaviourInjector(Observers observers, IItemStore itemStore)
+		public CharacterInventoryQueryBehaviourInjector(IItemStore itemStore)
 		{
-			m_observers = observers;
 			m_itemStore = itemStore;
 		}
 		
