@@ -18,22 +18,31 @@
  */
 package io.github.jevaengine.rpg.ui;
 
+import io.github.jevaengine.config.IConfigurationFactory;
+import io.github.jevaengine.config.IConfigurationFactory.ConfigurationConstructionException;
 import io.github.jevaengine.config.IImmutableVariable;
+import io.github.jevaengine.config.ImmutableVariableOverlay;
 import io.github.jevaengine.config.NoSuchChildVariableException;
+import io.github.jevaengine.config.NullVariable;
 import io.github.jevaengine.config.ValueSerializationException;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.ui.Control;
 import io.github.jevaengine.ui.IControlFactory;
 import io.github.jevaengine.ui.UnsupportedControlException;
 import io.github.jevaengine.util.Nullable;
+import java.net.URI;
+import javax.inject.Inject;
 
 public class RpgControlFactory implements IControlFactory
 {
 	private final IControlFactory m_controlFactory;
+	private final IConfigurationFactory m_configurationFactory;
 	
-	public RpgControlFactory(IControlFactory controlFactory)
+	@Inject
+	public RpgControlFactory(IControlFactory controlFactory, IConfigurationFactory configurationFactory)
 	{
 		m_controlFactory = controlFactory;
+		m_configurationFactory = configurationFactory;
 	}
 	
 	@Override
@@ -57,30 +66,33 @@ public class RpgControlFactory implements IControlFactory
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Control> T create(Class<T> controlClass, String instanceName, IImmutableVariable config) throws ControlConstructionException
+	public <T extends Control> T create(Class<T> controlClass, String instanceName, URI config, IImmutableVariable auxConfig) throws ControlConstructionException
 	{
 		try
 		{
+			String configPath = config.getPath();
+			IImmutableVariable configVar = new ImmutableVariableOverlay(auxConfig, configPath.isEmpty() || configPath.endsWith("/") ? new NullVariable() : m_configurationFactory.create(config));
+		
 			if(controlClass.equals(ItemContainer.class))
 			{
-				Rect2D bounds = config.getChild("bounds").getValue(Rect2D.class);
+				Rect2D bounds = configVar.getChild("bounds").getValue(Rect2D.class);
 				return (T)new ItemContainer(instanceName, bounds.width, bounds.height);
 			}else
-				return m_controlFactory.create(controlClass, instanceName, config);
-		} catch(ValueSerializationException | NoSuchChildVariableException e)
+				return m_controlFactory.create(controlClass, instanceName, config, auxConfig);
+		} catch(ConfigurationConstructionException | ValueSerializationException | NoSuchChildVariableException e)
 		{
 			throw new ControlConstructionException(controlClass.getName(), e);
 		}
 	}
 
 	@Override
-	public Control create(String controlName, String instanceName, IImmutableVariable config) throws ControlConstructionException
+	public Control create(String controlName, String instanceName, URI config, IImmutableVariable auxConfig) throws ControlConstructionException
 	{
 		Class<? extends Control> ctrlClass = lookup(controlName);
 		
 		if(ctrlClass == null)
 			throw new ControlConstructionException(controlName, new UnsupportedControlException());
 		
-		return create(ctrlClass, instanceName, config);
+		return create(ctrlClass, instanceName, config, auxConfig);
 	}
 }

@@ -22,9 +22,9 @@ import io.github.jevaengine.IDisposable;
 import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.rpg.entity.character.IImmutableLoadout.ILoadoutObserver;
+import io.github.jevaengine.rpg.entity.character.ILoadout.ILoadoutSlot;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
-import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
@@ -45,10 +45,10 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 		m_modelMerge.add(base);
 		loadout.getObservers().add(new LoadoutObserver());
 		
-		for(IItemSlot i : loadout.getSlots())
+		for(ILoadoutSlot i : loadout.getSlots())
 		{
 			if(!i.isEmpty())
-				mergeItemModel(i.getItem());
+				mergeItemModel(i.getItem(), i.getWieldTarget());
 		}
 	}
 	
@@ -65,12 +65,12 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 		m_modelMerge.dispose();
 	}
 	
-	private void mergeItemModel(IItem item)
+	private void mergeItemModel(IItem item, IWieldTarget target)
 	{
-		removeItemModel(item.getFunction().getWieldTarget());
+		removeItemModel(target);
 		
 		IAnimationSceneModel itemModel = item.createModel();
-		m_mergedEquipment.put(item.getFunction().getWieldTarget(), itemModel);
+		m_mergedEquipment.put(target, itemModel);
 		m_modelMerge.add(itemModel);
 	}
 	
@@ -148,9 +148,9 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 		}
 
 		@Override
-		public void equip(IItem item)
+		public void equip(IItem item, IWieldTarget target)
 		{
-			mergeItemModel(item);
+			mergeItemModel(item, target);
 		}	
 	}
 }

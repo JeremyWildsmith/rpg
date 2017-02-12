@@ -19,7 +19,6 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.IDisposable;
-import io.github.jevaengine.graphics.ColorGraphic;
 import io.github.jevaengine.math.Matrix3X3;
 import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Rect3F;
@@ -34,7 +33,6 @@ import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,7 +73,7 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 		m_maxHealthAttribute = maxHealthAttribute;
 		m_bloodEmitter = bloodEmitter;
 	
-		m_healthGuage = new ValueGuage(new ColorGraphic(Color.red, 70, 10));
+		m_healthGuage = new ValueGuage(new Rect2D(70, 10));
 		m_healthGuage.setStyle(statusStyle);
 		
 		m_components.add(new HealthGuageComponent());

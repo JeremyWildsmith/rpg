@@ -29,7 +29,7 @@ import io.github.jevaengine.ui.ComponentState;
 import io.github.jevaengine.ui.Control;
 import io.github.jevaengine.ui.style.ComponentStateStyle;
 import io.github.jevaengine.util.IObserverRegistry;
-import io.github.jevaengine.util.NullObservers;
+import io.github.jevaengine.util.Observers;
 import java.awt.Graphics2D;
 
 public final class ItemContainer extends Control
@@ -44,6 +44,8 @@ public final class ItemContainer extends Control
 	
 	private final Rect2D m_bounds;
 	
+	private Observers m_observers = new Observers();
+	
 	public ItemContainer(String instanceName, int width, int height)
 	{
 		super(COMPONENT_NAME, instanceName);
@@ -55,9 +57,13 @@ public final class ItemContainer extends Control
 		m_slot = slot;
 	}
 	
+	public IItemSlot getSlot() {
+		return m_slot;
+	}
+	
 	public IObserverRegistry getObservers()
 	{
-		return new NullObservers();
+		return m_observers;
 	}
 	
 	private void enterState(ComponentState state)
@@ -89,6 +95,7 @@ public final class ItemContainer extends Control
 		{
 			if(mouseEvent.type == InputMouseEvent.MouseEventType.MousePressed)
 			{
+				m_observers.raise(IItemContainerObserver.class).selected();
 				enterState(ComponentState.Activated);
 			} else if(mouseEvent.type == InputMouseEvent.MouseEventType.MouseReleased)
 			{
@@ -127,5 +134,9 @@ public final class ItemContainer extends Control
 	public Rect2D getBounds()
 	{
 		return new Rect2D(m_bounds);
+	}
+	
+	public interface IItemContainerObserver {
+		void selected();
 	}
 }

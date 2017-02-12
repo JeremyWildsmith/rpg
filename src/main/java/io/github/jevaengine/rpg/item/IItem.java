@@ -38,7 +38,7 @@ public interface IItem
 	
 	public interface IItemFunction
 	{
-		IWieldTarget getWieldTarget();
+		IWieldTarget[] getWieldTargets();
 		String getName();
 		IImmutableAttributeSet use(IRpgCharacter user, IRpgCharacter target, AttributeSet item);
 		ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, IRpgCharacter target, IImmutableAttributeSet item);
@@ -88,9 +88,9 @@ public interface IItem
 	public static final class NullItemFunction implements IItemFunction
 	{
 		@Override
-		public IWieldTarget getWieldTarget()
+		public IWieldTarget[] getWieldTargets()
 		{
-			return new NullWieldTarget();
+			return new IWieldTarget[] {};
 		}
 
 		@Override

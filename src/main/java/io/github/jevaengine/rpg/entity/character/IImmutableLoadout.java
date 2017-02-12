@@ -31,11 +31,17 @@ public interface IImmutableLoadout
 	@Nullable
 	IImmutableItemSlot getSlot(IWieldTarget wieldTarget);
 	
+	IWieldTarget[] getWieldTargets();
+	
 	IImmutableItemSlot[] getSlots();
 	
 	public interface ILoadoutObserver
 	{
 		void unequip(IWieldTarget wieldTarget);
-		void equip(IItem item);
+		void equip(IItem item, IWieldTarget wieldTarget);
+	}
+
+	public interface IImmutableLoadoutSlot extends IImmutableItemSlot {
+		IWieldTarget getWieldTarget();
 	}
 }

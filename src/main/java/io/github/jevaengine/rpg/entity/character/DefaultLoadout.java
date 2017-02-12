@@ -21,7 +21,6 @@ package io.github.jevaengine.rpg.entity.character;
 import io.github.jevaengine.rpg.item.DefaultItemSlot;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
-import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
@@ -34,7 +33,7 @@ import java.util.HashMap;
  */
 public final class DefaultLoadout implements ILoadout
 {
-	private HashMap<IWieldTarget, DefaultItemSlot> m_slots = new HashMap<>();
+	private HashMap<IWieldTarget, DefaultLoadoutItemSlot> m_slots = new HashMap<>();
 	
 	private Observers m_observers = new Observers();
 	
@@ -43,7 +42,7 @@ public final class DefaultLoadout implements ILoadout
 	public void addWieldTarget(IWieldTarget target)
 	{
 		if(!m_slots.containsKey(target))
-			m_slots.put(target, new DefaultItemSlot());
+			m_slots.put(target, new DefaultLoadoutItemSlot(target));
 	}
 	
 	@Override
@@ -54,7 +53,7 @@ public final class DefaultLoadout implements ILoadout
 	
 	@Override
 	@Nullable
-	public IItemSlot getSlot(IWieldTarget gearType)
+	public ILoadoutSlot getSlot(IWieldTarget gearType)
 	{
 		return m_slots.get(gearType);
 	}
@@ -63,27 +62,32 @@ public final class DefaultLoadout implements ILoadout
 	@Nullable
 	public IItem equip(IItem item)
 	{
-		DefaultItemSlot targetSlot = m_slots.get(item.getFunction().getWieldTarget());
+		for(IWieldTarget target : item.getFunction().getWieldTargets())
+		{
+			DefaultLoadoutItemSlot targetSlot = m_slots.get(target);
+
+			if(targetSlot == null)
+				continue;
+
+			IItem currentItem = targetSlot.getItem();
+
+			if(currentItem == item)
+				return item;
+
+			if(currentItem != null)
+				m_observers.raise(ILoadoutObserver.class).unequip(target);
+
+			m_observers.raise(ILoadoutObserver.class).equip(item, target);
+			return targetSlot.setItem(item);
+		}
 		
-		if(targetSlot == null)
-			return null;
-		
-		IItem currentItem = targetSlot.getItem();
-		
-		if(currentItem == item)
-			return item;
-		
-		if(currentItem != null)
-			m_observers.raise(ILoadoutObserver.class).unequip(currentItem.getFunction().getWieldTarget());
-		
-		m_observers.raise(ILoadoutObserver.class).equip(item);
-		return targetSlot.setItem(item);
+		return null;
 	}
 	
 	@Override
 	public IItem unequip(IWieldTarget target)
 	{
-		DefaultItemSlot targetSlot = m_slots.get(target);
+		DefaultLoadoutItemSlot targetSlot = m_slots.get(target);
 		
 		if(targetSlot == null)
 			return null;
@@ -96,18 +100,62 @@ public final class DefaultLoadout implements ILoadout
 	@Override
 	public void clear()
 	{
-		for(DefaultItemSlot s : m_slots.values())
+		for(DefaultLoadoutItemSlot s : m_slots.values())
 		{
 			if(!s.isEmpty())
-				unequip(s.getItem().getFunction().getWieldTarget());
+				unequip(s.getWieldTarget());
 		}
 	}
 
 	@Override
-	public IItemSlot[] getSlots()
+	public ILoadoutSlot[] getSlots()
 	{
-		Collection<DefaultItemSlot> slots = m_slots.values();
+		Collection<DefaultLoadoutItemSlot> slots = m_slots.values();
 		
-		return slots.toArray(new IItemSlot[slots.size()]);
+		return slots.toArray(new ILoadoutSlot[slots.size()]);
+	}
+
+	@Override
+	public IWieldTarget[] getWieldTargets() {
+		return m_slots.keySet().toArray(new IWieldTarget[m_slots.size()]);
+	}
+	
+	public final class DefaultLoadoutItemSlot implements ILoadoutSlot {
+		private final DefaultItemSlot m_slot = new DefaultItemSlot();
+		private final IWieldTarget m_wieldTarget;
+		
+		public DefaultLoadoutItemSlot(IWieldTarget wieldTarget) {
+			m_wieldTarget = wieldTarget;
+		}
+		
+		@Override
+		public IItem setItem(IItem item) {
+			return m_slot.setItem(item);
+		}
+
+		@Override
+		public IItem clear() {
+			return m_slot.clear();
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return m_slot.isEmpty();
+		}
+
+		@Override
+		public IItem getItem() {
+			return m_slot.getItem();
+		}
+
+		@Override
+		public IObserverRegistry getObservers() {
+			return m_slot.getObservers();
+		}
+
+		@Override
+		public IWieldTarget getWieldTarget() {
+			return m_wieldTarget;
+		}
 	}
 }

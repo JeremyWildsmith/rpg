@@ -31,8 +31,14 @@ public interface ILoadout extends IImmutableLoadout
 	@Nullable
 	IItem equip(IItem item);
 	
+	@Override
 	@Nullable
-	IItemSlot getSlot(IWieldTarget wieldTarget);
+	ILoadoutSlot getSlot(IWieldTarget wieldTarget);
 	
-	IItemSlot[] getSlots();
+	@Override
+	ILoadoutSlot[] getSlots();
+	
+	public interface ILoadoutSlot extends IItemSlot, IImmutableLoadoutSlot {
+		
+	}
 }

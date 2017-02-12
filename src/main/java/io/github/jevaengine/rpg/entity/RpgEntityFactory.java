@@ -43,6 +43,8 @@ import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.IEntityFactory;
 import io.github.jevaengine.world.entity.LogicController;
 import io.github.jevaengine.world.entity.ParticleDriver;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
+import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
@@ -63,16 +65,18 @@ public final class RpgEntityFactory implements IEntityFactory
 	private final IAudioClipFactory m_audioClipFactory;
 	private final IConfigurationFactory m_configurationFactory;
 	private final IRpgCharacterFactory m_characterFactory;
+	private final IAnimationSceneModelFactory m_animationSceneModelFactory;
 	
 	@Inject
 	public RpgEntityFactory(IScriptBuilderFactory scriptBuilderFactory, IAudioClipFactory audioClipFactory, IConfigurationFactory configurationFactory,
-			IRpgCharacterFactory characterFactory, IParticleEmitterFactory particleEmitterFactory)
+			IRpgCharacterFactory characterFactory, IParticleEmitterFactory particleEmitterFactory, IAnimationSceneModelFactory animationSceneModelFactory)
 	{
 		m_scriptBuilderFactory = scriptBuilderFactory;
 		m_audioClipFactory = audioClipFactory;
 		m_configurationFactory = configurationFactory;
 		m_characterFactory = characterFactory;
 		m_particleEmitterFactory = particleEmitterFactory;
+		m_animationSceneModelFactory = animationSceneModelFactory;
 	}
 	
 	@Override
@@ -174,7 +178,7 @@ public final class RpgEntityFactory implements IEntityFactory
 		try
 		{
 			varConfig = new ImmutableVariableOverlay(varConfig, 
-																								configPath.isEmpty() || configPath.endsWith("/") ? new NullVariable() : m_configurationFactory.create(config));
+													configPath.isEmpty() || configPath.endsWith("/") ? new NullVariable() : m_configurationFactory.create(config));
 		} catch (ConfigurationConstructionException e)
 		{
 			m_logger.error("Error occured constructing configuration for entity, ignoring external configuration and using just aux config.", e);
@@ -216,6 +220,23 @@ public final class RpgEntityFactory implements IEntityFactory
 					IParticleEmitter emitter = entityFactory.m_particleEmitterFactory.create(context.resolve(decl.particle));
 					return new ParticleDriver(instanceName, emitter);
 				} catch (SceneModelConstructionException | ValueSerializationException e)
+				{
+					throw new EntityConstructionException(e);
+				}
+			}
+		}),
+		
+		Door(Door.class, "door", new EntityBuilder() {
+			@Override
+			public IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException
+			{
+				try
+				{
+				
+					DoorDeclaration decl = auxConfig.getValue(DoorDeclaration.class);
+					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(new URI(decl.model)));
+					return new Door(model, instanceName, decl.isOpen);
+				} catch (SceneModelConstructionException | ValueSerializationException | URISyntaxException e)
 				{
 					throw new EntityConstructionException(e);
 				}
@@ -373,8 +394,33 @@ public final class RpgEntityFactory implements IEntityFactory
 				throw new ValueSerializationException(ex);
 			}
 		}
-		
-		
+	}
+	
+	
+	public static final class DoorDeclaration implements ISerializable
+	{
+		public String model;
+		public boolean isOpen;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException
+		{
+			target.addChild("model").setValue(model);
+			target.addChild("isOpen").setValue(isOpen);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException
+		{
+			try
+			{
+				model = source.getChild("model").getValue(String.class);
+				isOpen = source.getChild("isOpen").getValue(Boolean.class);
+			} catch (NoSuchChildVariableException ex)
+			{
+				throw new ValueSerializationException(ex);
+			}
+		}
 	}
 	
 	public static final class AmbientAudioSourceDeclaration implements ISerializable
