@@ -21,6 +21,8 @@ package io.github.jevaengine.rpg.entity.character;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemSlot;
+import io.github.jevaengine.util.IObserverRegistry;
+import io.github.jevaengine.util.NullObservers;
 import io.github.jevaengine.util.Nullable;
 
 public interface ILoadout extends IImmutableLoadout
@@ -40,5 +42,36 @@ public interface ILoadout extends IImmutableLoadout
 	
 	public interface ILoadoutSlot extends IItemSlot, IImmutableLoadoutSlot {
 		
+	}
+	
+	public static final class NullLoadoutSlot implements ILoadoutSlot {
+
+		@Override
+		public IItem setItem(IItem item) { return null; }
+
+		@Override
+		public IItem clear() {
+			return null;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return true;
+		}
+
+		@Override
+		public IItem getItem() {
+			return null;
+		}
+
+		@Override
+		public IObserverRegistry getObservers() {
+			return new NullObservers();
+		}
+
+		@Override
+		public IWieldTarget getWieldTarget() {
+			return new IItem.NullWieldTarget();
+		}
 	}
 }
