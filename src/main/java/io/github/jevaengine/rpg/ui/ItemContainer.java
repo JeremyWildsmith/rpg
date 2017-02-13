@@ -39,8 +39,6 @@ public final class ItemContainer extends Control
 	private IItemSlot m_slot = new NullItemSlot();
 
 	private ComponentState m_state = ComponentState.Default;
-
-	private IFont m_font = new NullFont();
 	
 	private final Rect2D m_bounds;
 	
@@ -72,8 +70,6 @@ public final class ItemContainer extends Control
 		
 		ComponentStateStyle stateStyle = getComponentStyle().getStateStyle(m_state);
 		stateStyle.playEnter();
-		
-		m_font = stateStyle.getFont();
 	}
 	
 	@Override
