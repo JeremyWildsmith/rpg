@@ -130,12 +130,23 @@ public final class DefaultLoadout implements ILoadout
 		
 		@Override
 		public IItem setItem(IItem item) {
-			return m_slot.setItem(item);
+			IItem old = clear();
+			
+			m_slot.setItem(item);
+			
+			m_observers.raise(ILoadoutObserver.class).equip(item, m_wieldTarget);
+			
+			return old;
 		}
 
 		@Override
 		public IItem clear() {
-			return m_slot.clear();
+			IItem old;
+			
+			if((old = m_slot.clear()) != null)
+				m_observers.raise(ILoadoutObserver.class).unequip(m_wieldTarget);
+		
+			return old;
 		}
 
 		@Override
