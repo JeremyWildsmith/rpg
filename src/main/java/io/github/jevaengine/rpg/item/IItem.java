@@ -18,7 +18,7 @@
  */
 package io.github.jevaengine.rpg.item;
 
-import io.github.jevaengine.graphics.IRenderable;
+import io.github.jevaengine.graphics.IImmutableGraphic;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
@@ -33,7 +33,7 @@ public interface IItem
 
 	AttributeSet getAttributes();
 
-	IRenderable getIcon();
+	IImmutableGraphic getIcon();
 	IAnimationSceneModel createModel();
 	
 	public interface IItemFunction

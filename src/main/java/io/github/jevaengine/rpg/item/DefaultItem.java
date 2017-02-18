@@ -18,7 +18,8 @@
  */
 package io.github.jevaengine.rpg.item;
 
-import io.github.jevaengine.graphics.IRenderable;
+import io.github.jevaengine.graphics.IGraphic;
+import io.github.jevaengine.graphics.IImmutableGraphic;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
@@ -28,7 +29,7 @@ public final class DefaultItem implements IItem
 	private final String m_description;
 	private final IItemFunction m_function;
 	private final AttributeSet m_attributes;
-	private final IRenderable m_icon;
+	private final IImmutableGraphic m_icon;
 	private final IAnimationSceneModel m_model;
 	
 	public DefaultItem(DefaultItem item)
@@ -41,7 +42,7 @@ public final class DefaultItem implements IItem
 		m_model = item.m_model.clone();
 	}
 	
-	public DefaultItem(String name, String description, IItemFunction function, AttributeSet attributes, IRenderable graphic, IAnimationSceneModel model)
+	public DefaultItem(String name, String description, IItemFunction function, AttributeSet attributes, IImmutableGraphic graphic, IAnimationSceneModel model)
 	{
 		m_name = name;
 		m_description = description;
@@ -76,7 +77,7 @@ public final class DefaultItem implements IItem
 	}
 
 	@Override
-	public IRenderable getIcon()
+	public IImmutableGraphic getIcon()
 	{
 		return m_icon;
 	}
