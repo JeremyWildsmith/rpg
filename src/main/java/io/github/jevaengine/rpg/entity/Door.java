@@ -84,6 +84,8 @@ public class Door implements IEntity
 		
 		m_isOpen = false;
 		m_closeAnimation.setState(AnimationSceneModelAnimationState.PlayToEnd);
+
+		m_observers.raise(IDoorObserver.class).doorStatusChanged();
 	}
 	
 	public void open() {
@@ -92,6 +94,8 @@ public class Door implements IEntity
 		
 		m_isOpen = true;
 		m_openAnimation.setState(AnimationSceneModelAnimationState.PlayToEnd);
+
+		m_observers.raise(IDoorObserver.class).doorStatusChanged();
 	}
 	
 	public boolean isOpen() {
@@ -231,5 +235,9 @@ public class Door implements IEntity
 				m_body.setCollidable(!m_isOpen);
 			}
 		}
+	}
+
+	public interface IDoorObserver {
+		void doorStatusChanged();
 	}
 }
