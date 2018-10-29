@@ -41,8 +41,8 @@ public interface IItem
 	{
 		IWieldTarget[] getWieldTargets();
 		String getName();
-		IImmutableAttributeSet use(IRpgCharacter user, IEntity target, AttributeSet item);
-		ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, IEntity target, IImmutableAttributeSet item);
+		IImmutableAttributeSet use(IRpgCharacter user, Object target, AttributeSet itemAttributes, IItem item);
+		ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, Object target, IImmutableAttributeSet item);
 	}
 	
 	public static final class ItemUseAbilityTestResults
@@ -101,13 +101,13 @@ public interface IItem
 		}
 
 		@Override
-		public ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, IEntity target, IImmutableAttributeSet item)
+		public ItemUseAbilityTestResults testUseAbility(IRpgCharacter user, Object target, IImmutableAttributeSet item)
 		{
 			return new ItemUseAbilityTestResults(false, "Item will null function cannot be used.");
 		}
 		
 		@Override
-		public IImmutableAttributeSet use(IRpgCharacter user, IEntity target, AttributeSet item)
+		public IImmutableAttributeSet use(IRpgCharacter user, Object target, AttributeSet itemAttributes, IItem item)
 		{
 			return new AttributeSet();
 		}
