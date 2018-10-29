@@ -18,6 +18,7 @@
  */
 package io.github.jevaengine.rpg.entity;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.github.jevaengine.audio.IAudioClip;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.audio.IAudioClipFactory.AudioClipConstructionException;
@@ -38,13 +39,11 @@ import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.script.IScriptBuilderFactory.ScriptBuilderConstructionException;
 import io.github.jevaengine.script.NullScriptBuilder;
 import io.github.jevaengine.util.Nullable;
-import io.github.jevaengine.world.entity.DefaultEntityTaskModelFactory;
-import io.github.jevaengine.world.entity.IEntity;
-import io.github.jevaengine.world.entity.IEntityFactory;
-import io.github.jevaengine.world.entity.LogicController;
-import io.github.jevaengine.world.entity.ParticleDriver;
+import io.github.jevaengine.world.entity.*;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModelFactory;
+import io.github.jevaengine.world.scene.model.ISceneModel;
+import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
@@ -52,6 +51,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+
+import javafx.scene.Scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,10 +67,12 @@ public final class RpgEntityFactory implements IEntityFactory
 	private final IConfigurationFactory m_configurationFactory;
 	private final IRpgCharacterFactory m_characterFactory;
 	private final IAnimationSceneModelFactory m_animationSceneModelFactory;
+	private final ISceneModelFactory m_modelFactory;
 	
 	@Inject
 	public RpgEntityFactory(IScriptBuilderFactory scriptBuilderFactory, IAudioClipFactory audioClipFactory, IConfigurationFactory configurationFactory,
-			IRpgCharacterFactory characterFactory, IParticleEmitterFactory particleEmitterFactory, IAnimationSceneModelFactory animationSceneModelFactory)
+			IRpgCharacterFactory characterFactory, IParticleEmitterFactory particleEmitterFactory, IAnimationSceneModelFactory animationSceneModelFactory,
+							ISceneModelFactory modelFactory)
 	{
 		m_scriptBuilderFactory = scriptBuilderFactory;
 		m_audioClipFactory = audioClipFactory;
@@ -77,6 +80,7 @@ public final class RpgEntityFactory implements IEntityFactory
 		m_characterFactory = characterFactory;
 		m_particleEmitterFactory = particleEmitterFactory;
 		m_animationSceneModelFactory = animationSceneModelFactory;
+		m_modelFactory = modelFactory;
 	}
 	
 	@Override
@@ -308,7 +312,7 @@ public final class RpgEntityFactory implements IEntityFactory
 				}
 			}
 		}),
-		
+
 		LogicController(LogicController.class, "logicController", new EntityBuilder() {
 			@Override
 			public IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable config) throws EntityConstructionException
@@ -330,11 +334,28 @@ public final class RpgEntityFactory implements IEntityFactory
 					{
 						m_logger.error("Error constructing behavior for entity " + instanceName +". Using null behavior instead.", e);
 					}
-					
+
 					return new LogicController(new DefaultEntityTaskModelFactory(), scriptBuilder, instanceName);
 				} catch (ValueSerializationException e)
 				{
 					throw new EntityConstructionException(RpgEntity.LogicController.getName(), e);
+				}
+			}
+		}),
+
+		SceneArtifact(SceneArtifact.class, "sceneArtifact", new EntityBuilder() {
+			@Override
+			public IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable config) throws EntityConstructionException
+			{
+				try
+				{
+					SceneArtifactDeclaration decl = config.getValue(SceneArtifactDeclaration.class);
+
+					ISceneModel model = entityFactory.m_modelFactory.create(context.resolve(new URI(decl.model)));
+					return new SceneArtifact(model, true, !decl.blocking);
+				} catch (SceneModelConstructionException | URISyntaxException | ValueSerializationException e)
+				{
+					throw new EntityConstructionException(RpgEntity.SceneArtifact.getName(), e);
 				}
 			}
 		});
@@ -372,7 +393,7 @@ public final class RpgEntityFactory implements IEntityFactory
 			public abstract IEntity create(RpgEntityFactory entityFactory, String instanceName, URI context, IImmutableVariable auxConfig) throws EntityConstructionException;
 		}
 	}
-	
+
 	public static final class ParticleDriverDeclaration implements ISerializable
 	{
 		public String particle;
@@ -395,8 +416,34 @@ public final class RpgEntityFactory implements IEntityFactory
 			}
 		}
 	}
-	
-	
+
+	public static final class SceneArtifactDeclaration implements ISerializable
+	{
+		public String model;
+		public boolean blocking;
+
+		@Override
+		public void serialize(IVariable target) throws ValueSerializationException
+		{
+			target.addChild("model").setValue(model);
+			target.addChild("blocking").setValue(blocking);
+		}
+
+		@Override
+		public void deserialize(IImmutableVariable source) throws ValueSerializationException
+		{
+			try
+			{
+				model = source.getChild("model").getValue(String.class);
+				blocking = source.getChild("blocking").getValue(Boolean.class);
+			} catch (NoSuchChildVariableException ex)
+			{
+				throw new ValueSerializationException(ex);
+			}
+		}
+	}
+
+
 	public static final class DoorDeclaration implements ISerializable
 	{
 		public String model;
