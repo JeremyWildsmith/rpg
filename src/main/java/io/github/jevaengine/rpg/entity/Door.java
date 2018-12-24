@@ -54,8 +54,9 @@ public class Door implements IEntity
 	private final IAnimationSceneModelAnimation m_openAnimation;
 	private final IAnimationSceneModelAnimation m_closeAnimation;
 	private boolean m_isOpen = false;
+	private boolean m_isLocked = false;
 	
-	public Door(IAnimationSceneModel model, String name, boolean isOpen)
+	public Door(IAnimationSceneModel model, String name, boolean isOpen, boolean isLocked)
 	{
 		m_name = name;
 		
@@ -68,6 +69,7 @@ public class Door implements IEntity
 		m_closeAnimation.getObservers().add(new DoorAnimationStateObserver());
 		
 		m_isOpen = false;
+		m_isLocked = isLocked;
 		m_closeAnimation.setState(AnimationSceneModelAnimationState.PlayToEnd);
 		
 		m_physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyDescription.PhysicsBodyType.Static, model.getBodyShape(), 1.0F, true, false, 1.0F);
@@ -79,6 +81,9 @@ public class Door implements IEntity
 	}
 	
 	public void close() {
+		if(m_isLocked)
+			return;
+
 		if(!m_isOpen || !(m_openAnimation.getState() == AnimationSceneModelAnimationState.Stop && m_closeAnimation.getState() == AnimationSceneModelAnimationState.Stop))
 			return;
 		
@@ -89,6 +94,9 @@ public class Door implements IEntity
 	}
 	
 	public void open() {
+		if(m_isLocked)
+			return;
+
 		if(m_isOpen || !(m_openAnimation.getState() == AnimationSceneModelAnimationState.Stop && m_closeAnimation.getState() == AnimationSceneModelAnimationState.Stop))
 			return;
 		
@@ -101,7 +109,19 @@ public class Door implements IEntity
 	public boolean isOpen() {
 		return m_isOpen;
 	}
-	
+
+	public boolean isLocked() {
+		return m_isLocked;
+	}
+
+	public void lock() {
+		m_isLocked = true;
+	}
+
+	public void unlock() {
+		m_isLocked = false;
+	}
+
 	@Override
 	public void dispose()
 	{
@@ -157,9 +177,11 @@ public class Door implements IEntity
 		
 		destroyPhysicsBody();
 		
-		if(m_physicsBodyDescription == null)
+		if(m_physicsBodyDescription == null) {
+			m_physicsBodyDescription.collisionExceptions = new Class[] { Door.class };
 			m_body = new NonparticipantPhysicsBody(this, m_model.getAABB());
-		else
+
+		} else
 		{
 			m_body = m_world.getPhysicsWorld().createBody(this, m_physicsBodyDescription);
 			m_observers.raise(IEntity.IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), m_body);

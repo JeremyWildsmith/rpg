@@ -239,7 +239,7 @@ public final class RpgEntityFactory implements IEntityFactory
 				
 					DoorDeclaration decl = auxConfig.getValue(DoorDeclaration.class);
 					IAnimationSceneModel model = entityFactory.m_animationSceneModelFactory.create(context.resolve(new URI(decl.model)));
-					return new Door(model, instanceName, decl.isOpen);
+					return new Door(model, instanceName, decl.isOpen, decl.isLocked);
 				} catch (SceneModelConstructionException | ValueSerializationException | URISyntaxException e)
 				{
 					throw new EntityConstructionException(e);
@@ -448,12 +448,14 @@ public final class RpgEntityFactory implements IEntityFactory
 	{
 		public String model;
 		public boolean isOpen;
+		public boolean isLocked;
 
 		@Override
 		public void serialize(IVariable target) throws ValueSerializationException
 		{
 			target.addChild("model").setValue(model);
 			target.addChild("isOpen").setValue(isOpen);
+			target.addChild("isLocked").setValue(isLocked);
 		}
 
 		@Override
@@ -463,6 +465,12 @@ public final class RpgEntityFactory implements IEntityFactory
 			{
 				model = source.getChild("model").getValue(String.class);
 				isOpen = source.getChild("isOpen").getValue(Boolean.class);
+
+				if(source.childExists("isLocked"))
+					isLocked = source.getChild("isLocked").getValue(Boolean.class);
+				else
+					isLocked = false;
+
 			} catch (NoSuchChildVariableException ex)
 			{
 				throw new ValueSerializationException(ex);
