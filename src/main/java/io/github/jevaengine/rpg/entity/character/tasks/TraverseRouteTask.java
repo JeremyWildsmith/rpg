@@ -45,7 +45,7 @@ public final class TraverseRouteTask implements ITask
 	public void setRoute(Route route, float arrivalTolorance)
 	{
 		m_steeringBehavior = new SteeringBehaviorList(new ISteeringBehavior[] {
-				new TraverseRouteBehavior(1.0F, route, arrivalTolorance)
+				new TraverseRouteBehavior(m_subject.getBody(), 1.0F, route, arrivalTolorance)
 			});
 	}
 	
@@ -93,7 +93,7 @@ public final class TraverseRouteTask implements ITask
 		@Override
 		public boolean isDone()
 		{
-			return m_isCancel || m_steeringBehavior.direct(m_subject.getBody(), new Vector2F()).isZero();
+			return m_isCancel || m_steeringBehavior.direct().isZero();
 		}
 		
 	}

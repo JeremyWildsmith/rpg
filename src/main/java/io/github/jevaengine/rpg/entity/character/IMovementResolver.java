@@ -21,21 +21,44 @@ package io.github.jevaengine.rpg.entity.character;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
+import io.github.jevaengine.world.steering.ISteeringDriver;
 
 public interface IMovementResolver extends IRpgCharacterMechanicResolver
 {
 	void queue(IMovementDirector director);
 	void queueTop(IMovementDirector director);
 	void dequeue(IMovementDirector director);
-	
+	IMovementDirector getActiveDirector();
+
 	public interface IMovementDirector
 	{
 		ISteeringBehavior getBehavior();
+
+		default float getSpeed() {
+			return -1;
+		}
+
 		boolean isDone();
+	}
+
+	public static final class NullMovementDirector implements IMovementDirector {
+		@Override
+		public ISteeringBehavior getBehavior() {
+			return new ISteeringBehavior.NullSteeringBehavior();
+		}
+
+		@Override
+		public boolean isDone() {
+			return true;
+		}
 	}
 	
 	public static final class NullMovementResolver implements IMovementResolver
 	{
+		public IMovementDirector getActiveDirector() {
+			return new NullMovementDirector();
+		}
+
 		@Override
 		public void queue(IMovementDirector director) { }
 
