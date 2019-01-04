@@ -24,13 +24,10 @@ import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.rpg.entity.character.ILoadout;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
 import io.github.jevaengine.rpg.item.IItemSlot;
-import io.github.jevaengine.ui.IWindowFactory;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.Observers;
+
 import java.net.URI;
 
 public final class LoadoutQueryFactory {

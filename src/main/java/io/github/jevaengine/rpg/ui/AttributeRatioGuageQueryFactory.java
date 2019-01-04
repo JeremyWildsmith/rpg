@@ -23,15 +23,10 @@ import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.IImmutableAttributeSet.IImmutableAttribute;
-import io.github.jevaengine.ui.IWindowFactory;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Timer;
 import io.github.jevaengine.ui.Timer.ITimerObserver;
-import io.github.jevaengine.ui.ValueGuage;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
+
 import java.net.URI;
 
 public final class AttributeRatioGuageQueryFactory

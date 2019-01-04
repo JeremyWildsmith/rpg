@@ -18,8 +18,6 @@
  */
 package io.github.jevaengine.rpg.ui;
 
-import io.github.jevaengine.graphics.IFont;
-import io.github.jevaengine.graphics.NullFont;
 import io.github.jevaengine.joystick.InputKeyEvent;
 import io.github.jevaengine.joystick.InputMouseEvent;
 import io.github.jevaengine.math.Rect2D;
@@ -30,7 +28,8 @@ import io.github.jevaengine.ui.Control;
 import io.github.jevaengine.ui.style.ComponentStateStyle;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 
 public final class ItemContainer extends Control
 {

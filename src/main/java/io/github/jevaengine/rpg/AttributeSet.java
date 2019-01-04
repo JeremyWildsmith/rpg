@@ -20,6 +20,7 @@ package io.github.jevaengine.rpg;
 
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

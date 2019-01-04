@@ -23,15 +23,10 @@ import io.github.jevaengine.math.Rect2D;
 import io.github.jevaengine.math.Vector2D;
 import io.github.jevaengine.rpg.item.IItemSlot;
 import io.github.jevaengine.rpg.item.IItemStore;
-import io.github.jevaengine.ui.Button;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.Button.IButtonPressObserver;
-import io.github.jevaengine.ui.IWindowFactory;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.Label;
-import io.github.jevaengine.ui.NoSuchControlException;
-import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;

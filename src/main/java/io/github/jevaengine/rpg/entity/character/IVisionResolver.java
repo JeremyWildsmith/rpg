@@ -20,7 +20,6 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 public interface IVisionResolver extends IRpgCharacterMechanicResolver
 {

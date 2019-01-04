@@ -22,7 +22,6 @@ import io.github.jevaengine.graphics.IImmutableGraphic;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
-import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 

@@ -18,19 +18,11 @@
  */
 package io.github.jevaengine.rpg.entity;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.github.jevaengine.audio.IAudioClip;
 import io.github.jevaengine.audio.IAudioClipFactory;
 import io.github.jevaengine.audio.IAudioClipFactory.AudioClipConstructionException;
-import io.github.jevaengine.config.IConfigurationFactory;
+import io.github.jevaengine.config.*;
 import io.github.jevaengine.config.IConfigurationFactory.ConfigurationConstructionException;
-import io.github.jevaengine.config.IImmutableVariable;
-import io.github.jevaengine.config.ISerializable;
-import io.github.jevaengine.config.IVariable;
-import io.github.jevaengine.config.ImmutableVariableOverlay;
-import io.github.jevaengine.config.NoSuchChildVariableException;
-import io.github.jevaengine.config.NullVariable;
-import io.github.jevaengine.config.ValueSerializationException;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory;
 import io.github.jevaengine.rpg.entity.character.IRpgCharacterFactory.CharacterCreationException;
@@ -47,14 +39,13 @@ import io.github.jevaengine.world.scene.model.ISceneModelFactory;
 import io.github.jevaengine.world.scene.model.ISceneModelFactory.SceneModelConstructionException;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitter;
 import io.github.jevaengine.world.scene.model.particle.IParticleEmitterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.inject.Inject;
-
-import javafx.scene.Scene;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class RpgEntityFactory implements IEntityFactory
 {

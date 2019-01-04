@@ -18,7 +18,6 @@
  */
 package io.github.jevaengine.rpg.entity.character.tasks;
 
-import io.github.jevaengine.math.Vector2F;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.IMovementDirector;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.NullMovementResolver;

@@ -22,15 +22,8 @@ import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
-import io.github.jevaengine.rpg.entity.character.tasks.AttackTask;
-import io.github.jevaengine.rpg.entity.character.tasks.FollowEntityTask;
-import io.github.jevaengine.rpg.entity.character.tasks.ListenToTask;
-import io.github.jevaengine.rpg.entity.character.tasks.MovementTask;
-import io.github.jevaengine.rpg.entity.character.tasks.NarrateTask;
-import io.github.jevaengine.rpg.entity.character.tasks.SearchForTask;
+import io.github.jevaengine.rpg.entity.character.tasks.*;
 import io.github.jevaengine.rpg.entity.character.tasks.SearchForTask.ISearchListener;
-import io.github.jevaengine.rpg.entity.character.tasks.SpeakToTask;
-import io.github.jevaengine.rpg.entity.character.tasks.WonderTask;
 import io.github.jevaengine.rpg.item.IItemStore;
 import io.github.jevaengine.script.IFunctionFactory;
 import io.github.jevaengine.script.IScriptBuilder;
@@ -54,13 +47,14 @@ import io.github.jevaengine.world.physics.PhysicsBodyDescription;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class DefaultRpgCharacter implements IRpgCharacter
 {	

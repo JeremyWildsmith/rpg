@@ -21,6 +21,7 @@ package io.github.jevaengine.rpg.item;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
+
 import java.util.NoSuchElementException;
 
 public final class DefaultItemSlot implements IItemSlot

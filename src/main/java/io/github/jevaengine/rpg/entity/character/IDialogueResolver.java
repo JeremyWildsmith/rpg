@@ -26,7 +26,6 @@ import io.github.jevaengine.rpg.dialogue.IDialogueSpeakerSession;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 public interface IDialogueResolver extends IRpgCharacterMechanicResolver
 {

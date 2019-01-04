@@ -24,6 +24,7 @@ import io.github.jevaengine.world.scene.model.IAnimationSceneModel.IAnimationSce
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.NullAnimationSceneModelAnimation;
 import io.github.jevaengine.world.scene.model.IImmutableSceneModel;
 import io.github.jevaengine.world.scene.model.ISceneModel;
+
 import java.util.HashMap;
 import java.util.Map;
 

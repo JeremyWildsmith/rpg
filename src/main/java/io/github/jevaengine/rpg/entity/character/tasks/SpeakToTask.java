@@ -23,9 +23,10 @@ import io.github.jevaengine.rpg.dialogue.IDialogueSpeakerSession.NullDialogueSpe
 import io.github.jevaengine.rpg.entity.character.IRpgCharacter;
 import io.github.jevaengine.world.entity.IEntity;
 import io.github.jevaengine.world.entity.tasks.ITask;
-import java.lang.ref.WeakReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.ref.WeakReference;
 
 /**
  *

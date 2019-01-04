@@ -28,19 +28,16 @@ import io.github.jevaengine.rpg.dialogue.IDialogueListenerSession;
 import io.github.jevaengine.rpg.dialogue.IDialogueListenerSession.IDialogueListenerSessionObserver;
 import io.github.jevaengine.ui.Button;
 import io.github.jevaengine.ui.Button.IButtonPressObserver;
-import io.github.jevaengine.ui.IWindowFactory;
+import io.github.jevaengine.ui.*;
 import io.github.jevaengine.ui.IWindowFactory.WindowConstructionException;
-import io.github.jevaengine.ui.NoSuchControlException;
 import io.github.jevaengine.ui.TextArea;
-import io.github.jevaengine.ui.Viewport;
 import io.github.jevaengine.ui.Window;
-import io.github.jevaengine.ui.WindowBehaviourInjector;
-import io.github.jevaengine.ui.WindowManager;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Observers;
 import io.github.jevaengine.world.scene.ISceneBuffer;
 import io.github.jevaengine.world.scene.ISceneBufferFactory;
-import java.awt.Graphics2D;
+
+import java.awt.*;
 import java.net.URI;
 
 public final class CharacterDialogueQueryFactory

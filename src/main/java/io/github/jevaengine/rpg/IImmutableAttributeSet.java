@@ -20,6 +20,7 @@ package io.github.jevaengine.rpg;
 
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
+
 import java.util.Map;
 import java.util.Set;
 

@@ -19,9 +19,7 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.steering.ISteeringBehavior;
-import io.github.jevaengine.world.steering.ISteeringDriver;
 
 public interface IMovementResolver extends IRpgCharacterMechanicResolver
 {

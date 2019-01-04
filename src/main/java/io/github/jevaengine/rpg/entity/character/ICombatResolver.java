@@ -22,7 +22,6 @@ import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.NullObservers;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
-import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
 public interface ICombatResolver extends IRpgCharacterMechanicResolver
 {

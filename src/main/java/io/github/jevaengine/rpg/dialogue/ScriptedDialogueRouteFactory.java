@@ -18,13 +18,8 @@
  */
 package io.github.jevaengine.rpg.dialogue;
 
-import io.github.jevaengine.config.IConfigurationFactory;
+import io.github.jevaengine.config.*;
 import io.github.jevaengine.config.IConfigurationFactory.ConfigurationConstructionException;
-import io.github.jevaengine.config.IImmutableVariable;
-import io.github.jevaengine.config.ISerializable;
-import io.github.jevaengine.config.IVariable;
-import io.github.jevaengine.config.NoSuchChildVariableException;
-import io.github.jevaengine.config.ValueSerializationException;
 import io.github.jevaengine.rpg.dialogue.ScriptedDialogueRoute.ScriptedDialogueAnswer;
 import io.github.jevaengine.rpg.dialogue.ScriptedDialogueRoute.ScriptedDialogueQuery;
 import io.github.jevaengine.rpg.dialogue.ScriptedDialogueRouteFactory.ScriptedDialogueRouteDeclaration.ScriptedAnswerDeclaration;
@@ -34,16 +29,13 @@ import io.github.jevaengine.script.IScriptBuilderFactory;
 import io.github.jevaengine.script.IScriptBuilderFactory.ScriptBuilderConstructionException;
 import io.github.jevaengine.script.NullScriptBuilder;
 import io.github.jevaengine.util.Nullable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 public final class ScriptedDialogueRouteFactory implements IDialogueRouteFactory
 {

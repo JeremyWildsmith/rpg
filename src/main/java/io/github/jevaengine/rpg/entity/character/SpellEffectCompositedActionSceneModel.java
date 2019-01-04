@@ -30,12 +30,11 @@ import io.github.jevaengine.world.scene.model.IActionSceneModel;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 import io.github.jevaengine.world.scene.model.MergeActionSceneModel;
 import io.github.jevaengine.world.scene.model.TranslatedAnimationSceneModel;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public final class SpellEffectCompositedActionSceneModel implements IActionSceneModel, IDisposable
 {

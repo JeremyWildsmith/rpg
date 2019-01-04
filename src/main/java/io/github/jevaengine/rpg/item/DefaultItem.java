@@ -18,7 +18,6 @@
  */
 package io.github.jevaengine.rpg.item;
 
-import io.github.jevaengine.graphics.IGraphic;
 import io.github.jevaengine.graphics.IImmutableGraphic;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
