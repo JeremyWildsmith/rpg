@@ -64,12 +64,11 @@ public class Door implements IEntity
 		
 		m_openAnimation = model.hasAnimation(OPEN_ANIMATION_NAME) ? model.getAnimation(OPEN_ANIMATION_NAME) : new NullAnimationSceneModelAnimation();
 		m_closeAnimation = model.hasAnimation(CLOSE_ANIMATION_NAME) ? model.getAnimation(CLOSE_ANIMATION_NAME) : new NullAnimationSceneModelAnimation();
-		
+
 		m_openAnimation.getObservers().add(new DoorAnimationStateObserver());
 		m_closeAnimation.getObservers().add(new DoorAnimationStateObserver());
 		
 		m_isOpen = false;
-		m_isLocked = isLocked;
 		m_closeAnimation.setState(AnimationSceneModelAnimationState.PlayToEnd);
 		
 		m_physicsBodyDescription = new PhysicsBodyDescription(PhysicsBodyDescription.PhysicsBodyType.Static, model.getBodyShape(), 1.0F, true, false, 1.0F);
@@ -78,29 +77,27 @@ public class Door implements IEntity
 		
 		if(isOpen)
 			open();
+
+		m_isLocked = isLocked;
 	}
 	
 	public void close() {
-		if(m_isLocked)
-			return;
-
-		if(!m_isOpen || !(m_openAnimation.getState() == AnimationSceneModelAnimationState.Stop && m_closeAnimation.getState() == AnimationSceneModelAnimationState.Stop))
+		if(m_isLocked || !m_isOpen)
 			return;
 		
 		m_isOpen = false;
+		m_openAnimation.setState(AnimationSceneModelAnimationState.Stop);
 		m_closeAnimation.setState(AnimationSceneModelAnimationState.PlayToEnd);
 
 		m_observers.raise(IDoorObserver.class).doorStatusChanged();
 	}
 	
 	public void open() {
-		if(m_isLocked)
-			return;
-
-		if(m_isOpen || !(m_openAnimation.getState() == AnimationSceneModelAnimationState.Stop && m_closeAnimation.getState() == AnimationSceneModelAnimationState.Stop))
+		if(m_isLocked || m_isOpen)
 			return;
 		
 		m_isOpen = true;
+		m_closeAnimation.setState(AnimationSceneModelAnimationState.Stop);
 		m_openAnimation.setState(AnimationSceneModelAnimationState.PlayToEnd);
 
 		m_observers.raise(IDoorObserver.class).doorStatusChanged();
@@ -151,8 +148,7 @@ public class Door implements IEntity
 
 		m_world = world;
 
-		if(!m_isOpen)
-			constructPhysicsBody();
+		constructPhysicsBody();
 		
 		m_observers.raise(IEntity.IEntityWorldObserver.class).enterWorld();
 	}
