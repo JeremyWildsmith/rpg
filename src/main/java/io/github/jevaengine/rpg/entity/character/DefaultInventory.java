@@ -18,9 +18,7 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
-import io.github.jevaengine.rpg.item.DefaultItemSlot;
-import io.github.jevaengine.rpg.item.IItem;
-import io.github.jevaengine.rpg.item.IItemStore;
+import io.github.jevaengine.rpg.item.*;
 import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.util.Nullable;
 import io.github.jevaengine.util.Observers;
@@ -41,8 +39,11 @@ public final class DefaultInventory implements IItemStore
 	{
 		m_inventory = new ArrayList<>(slotCount);
 
-		for (int i = 0; i < slotCount; i++)
-			m_inventory.add(new DefaultItemSlot());
+		for (int i = 0; i < slotCount; i++) {
+			DefaultItemSlot slot = new DefaultItemSlot();
+			slot.getObservers().add(new ItemSlotObserver(i));
+			m_inventory.add(slot);
+		}
 	}
 
 	@Override
@@ -86,6 +87,12 @@ public final class DefaultInventory implements IItemStore
 	}
 
 	@Override
+	public void clear() {
+		for(IItemSlot s : m_inventory)
+			s.clear();
+	}
+
+	@Override
 	public boolean removeItem(IItem item)
 	{
 		for (int i = 0; i < m_inventory.size(); i++)
@@ -120,5 +127,24 @@ public final class DefaultInventory implements IItemStore
 	public boolean isFull()
 	{
 		return getEmptySlot() == null;
+	}
+
+	private final class ItemSlotObserver implements IImmutableItemSlot.IItemSlotObserver {
+		private final int index;
+
+		public ItemSlotObserver(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public void itemChanged(IItem old, IItem newItem) {
+			if(old != null) {
+				m_observers.raise(IItemStoreObserver.class).removeItem(index, old);
+			}
+
+			if(newItem != null) {
+				m_observers.raise(IItemStoreObserver.class).addItem(index, newItem);
+			}
+		}
 	}
 }

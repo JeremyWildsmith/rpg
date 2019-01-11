@@ -22,6 +22,8 @@ import io.github.jevaengine.graphics.IImmutableGraphic;
 import io.github.jevaengine.rpg.AttributeSet;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
 
+import java.util.Objects;
+
 public final class DefaultItem implements IItem
 {
 	private final String m_name;
@@ -86,43 +88,19 @@ public final class DefaultItem implements IItem
 	{
 		return m_model.clone();
 	}
-	
+
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((m_description == null) ? 0 : m_description.hashCode());
-		result = prime * result
-				+ ((m_function == null) ? 0 : m_function.hashCode());
-		result = prime * result + ((m_name == null) ? 0 : m_name.hashCode());
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		DefaultItem that = (DefaultItem) o;
+		return Objects.equals(m_name, that.m_name) &&
+				Objects.equals(m_description, that.m_description) &&
+				Objects.equals(m_function, that.m_function);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DefaultItem other = (DefaultItem) obj;
-		if (m_description == null) {
-			if (other.m_description != null)
-				return false;
-		} else if (!m_description.equals(other.m_description))
-			return false;
-		if (m_function == null) {
-			if (other.m_function != null)
-				return false;
-		} else if (!m_function.equals(other.m_function))
-			return false;
-		if (m_name == null) {
-			if (other.m_name != null)
-				return false;
-		} else if (!m_name.equals(other.m_name))
-			return false;
-		return true;
+	public int hashCode() {
+		return Objects.hash(m_name, m_description, m_function);
 	}
 }

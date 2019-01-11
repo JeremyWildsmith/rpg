@@ -61,7 +61,7 @@ public final class DefaultItemSlot implements IItemSlot
 		m_item = item;
 		
 		if(prev != m_item)
-			m_observers.raise(IItemSlotObserver.class).itemChanged();
+			m_observers.raise(IItemSlotObserver.class).itemChanged(prev, item);
 		
 		return prev;	
 	}
@@ -74,7 +74,7 @@ public final class DefaultItemSlot implements IItemSlot
 		m_item = null;
 		
 		if(prev != m_item)
-			m_observers.raise(IItemSlotObserver.class).itemChanged();
+			m_observers.raise(IItemSlotObserver.class).itemChanged(prev, m_item);
 		
 		return prev;
 	}

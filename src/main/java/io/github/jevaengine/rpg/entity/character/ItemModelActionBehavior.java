@@ -20,6 +20,7 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.rpg.item.IImmutableItemSlot;
 import io.github.jevaengine.rpg.item.IImmutableItemSlot.IItemSlotObserver;
+import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IItemFunction;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.AnimationSceneModelAnimationState;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel.IAnimationSceneModelAnimation;
@@ -99,10 +100,9 @@ public final class ItemModelActionBehavior implements IDefaultActionModelBehavio
 	private class AnimationController implements IAnimationSceneModelAnimationObserver, IItemSlotObserver
 	{
 		private IAnimationSceneModelAnimation m_currentAnimation = new NullAnimationSceneModelAnimation();
-		
+
 		@Override
-		public void itemChanged()
-		{
+		public void itemChanged(IItem old, IItem newItem) {
 			//Cycle the animation (ie, to select the proper animation for the item.
 			end();
 			begin();

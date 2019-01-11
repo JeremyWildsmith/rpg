@@ -32,6 +32,6 @@ public interface IImmutableItemSlot
 	
 	public static interface IItemSlotObserver
 	{
-		void itemChanged();
+		void itemChanged(@Nullable IItem old, @Nullable IItem newItem);
 	}
 }

@@ -70,7 +70,7 @@ public final class DefaultLoadout implements ILoadout
 			if(targetSlot == null)
 				continue;
 
-			IItem currentItem = targetSlot.getItem();
+			IItem currentItem = targetSlot.isEmpty() ? null : targetSlot.getItem();
 
 			if(currentItem == item)
 				return item;

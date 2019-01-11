@@ -32,4 +32,5 @@ public interface IItemStore extends IImmutableItemStore
 	boolean hasItem(IItem item);
 	boolean addItem(IItem item);
 	boolean removeItem(IItem item);
+	void clear();
 }
