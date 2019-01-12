@@ -24,6 +24,7 @@ import io.github.jevaengine.math.Rect3F;
 import io.github.jevaengine.rpg.entity.character.ISpellCastResolver.ISpellCastResolverObserver;
 import io.github.jevaengine.rpg.spell.IImmutableSpellImpactController;
 import io.github.jevaengine.rpg.spell.ISpell;
+import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
@@ -110,6 +111,11 @@ public final class SpellEffectCompositedActionSceneModel implements IActionScene
 	public void setDirection(Direction direction)
 	{
 		m_modelMerge.setDirection(direction);
+	}
+
+	@Override
+	public IObserverRegistry getObservers() {
+		return m_modelMerge.getObservers();
 	}
 
 	@Override

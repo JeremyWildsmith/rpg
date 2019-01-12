@@ -25,6 +25,7 @@ import io.github.jevaengine.rpg.entity.character.IImmutableLoadout.ILoadoutObser
 import io.github.jevaengine.rpg.entity.character.ILoadout.ILoadoutSlot;
 import io.github.jevaengine.rpg.item.IItem;
 import io.github.jevaengine.rpg.item.IItem.IWieldTarget;
+import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IAnimationSceneModel;
@@ -139,7 +140,17 @@ public final class EquipmentCompositedAnimationSceneModel implements IAnimationS
 	{
 		return m_modelMerge.hasAnimation(name);
 	}
-	
+
+	@Override
+	public IObserverRegistry getObservers() {
+		return m_modelMerge.getObservers();
+	}
+
+	@Override
+	public String[] getAnimations() {
+		return m_modelMerge.getAnimations();
+	}
+
 	private final class LoadoutObserver implements ILoadoutObserver
 	{
 		@Override

@@ -28,6 +28,7 @@ import io.github.jevaengine.rpg.IImmutableAttributeSet.IImmutableAttribute;
 import io.github.jevaengine.ui.Label;
 import io.github.jevaengine.ui.ValueGuage;
 import io.github.jevaengine.ui.style.IUIStyle;
+import io.github.jevaengine.util.IObserverRegistry;
 import io.github.jevaengine.world.Direction;
 import io.github.jevaengine.world.physics.PhysicsBodyShape;
 import io.github.jevaengine.world.scene.model.IActionSceneModel;
@@ -151,6 +152,11 @@ public class StatusCompositedActionSceneModel implements IActionSceneModel, IDis
 	public void setDirection(Direction direction)
 	{
 		m_baseModel.setDirection(direction);
+	}
+
+	@Override
+	public IObserverRegistry getObservers() {
+		return m_baseModel.getObservers();
 	}
 
 	@Override
