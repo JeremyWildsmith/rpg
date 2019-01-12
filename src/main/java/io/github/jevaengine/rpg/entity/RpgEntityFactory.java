@@ -203,7 +203,7 @@ public final class RpgEntityFactory implements IEntityFactory
 		return create(entityClazz, instanceName, config, auxConfig);
 	}
 	
-	private enum RpgEntity
+	public enum RpgEntity
 	{
 		ParticleDriver(ParticleDriver.class, "particleDriver", new EntityBuilder() {
 			@Override
@@ -343,7 +343,7 @@ public final class RpgEntityFactory implements IEntityFactory
 					SceneArtifactDeclaration decl = config.getValue(SceneArtifactDeclaration.class);
 
 					ISceneModel model = entityFactory.m_modelFactory.create(context.resolve(new URI(decl.model)));
-					return new SceneArtifact(model, true, !decl.blocking);
+					return new SceneArtifact(instanceName, model, true, !decl.blocking);
 				} catch (SceneModelConstructionException | URISyntaxException | ValueSerializationException e)
 				{
 					throw new EntityConstructionException(RpgEntity.SceneArtifact.getName(), e);
