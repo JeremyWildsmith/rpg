@@ -24,4 +24,11 @@ import io.github.jevaengine.world.scene.model.IActionSceneModel;
 public interface IAllegianceResolverFactory
 {
 	IAllegianceResolver create(IRpgCharacter host, AttributeSet attributes, IActionSceneModel model);
+
+	public class NullAllegianceResolverFactory implements IAllegianceResolverFactory {
+		@Override
+		public IAllegianceResolver create(IRpgCharacter host, AttributeSet attributes, IActionSceneModel model) {
+			return new IAllegianceResolver.NullAllegianceResolver();
+		}
+	}
 }

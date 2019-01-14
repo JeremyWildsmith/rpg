@@ -24,4 +24,11 @@ import io.github.jevaengine.world.scene.model.IActionSceneModel;
 public interface IVisionResolverFactory
 {
 	IVisionResolver create(IRpgCharacter host, AttributeSet attributes, IActionSceneModel model);
+
+	public class NullVisionResolverFactory implements IVisionResolverFactory {
+		@Override
+		public IVisionResolver create(IRpgCharacter host, AttributeSet attributes, IActionSceneModel model) {
+			return new IVisionResolver.NullVisionResolver();
+		}
+	}
 }

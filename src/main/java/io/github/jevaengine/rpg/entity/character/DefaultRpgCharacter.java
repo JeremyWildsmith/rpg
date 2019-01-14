@@ -56,7 +56,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class DefaultRpgCharacter implements IRpgCharacter
+public class DefaultRpgCharacter implements IRpgCharacter
 {	
 	private final Logger m_logger = LoggerFactory.getLogger(DefaultRpgCharacter.class);
 
@@ -65,14 +65,13 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	private final String m_name;
 
 	private final AttributeSet m_attributes;
-	
-	private final ICombatResolver m_combatResolver;
-	private final ISpellCastResolver m_spellCastResolver;
+
 	private final IDialogueResolver m_dialogueResolver;
 	private final IMovementResolver m_movementResolver;
 	private final IVisionResolver m_visionResolver;
 	private final IAllegianceResolver m_allegianceResolver;
 	private final IStatusResolver m_statusResolver;
+
 	
 	private final IRpgCharacterMechanicResolver m_resolvers[];
 	
@@ -96,8 +95,6 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 						IDialogueRouteFactory dialogueRotueFactory,
 						AttributeSet attributes,
 						IStatusResolverFactory statusResolver,
-						ICombatResolverFactory combatResolver,
-						ISpellCastResolverFactory spellCastResolver,
 						IDialogueResolverFactory dialogueResolver,
 						IMovementResolverFactory movementResolver,
 						IVisionResolverFactory visionResolver,
@@ -107,6 +104,7 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 						IActionSceneModel model,
 						PhysicsBodyDescription physicsBodyDescription,
 						String name)
+
 	{
 		m_dialogueRouteFactory = dialogueRotueFactory;
 		
@@ -122,21 +120,18 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 		
 		m_dialogueResolver = dialogueResolver.create(this, m_attributes, model);
 		m_statusResolver = statusResolver.create(this, m_attributes, model);
-		m_spellCastResolver = spellCastResolver.create(this, attributes, model);
-		m_combatResolver = combatResolver.create(this, m_attributes, model);
 		m_movementResolver = movementResolver.create(this, m_attributes, model);
 		m_visionResolver = visionResolver.create(this, m_attributes, model);
 		m_allegianceResolver = allegianceResolver.create(this, attributes, model);
-	
+
 		m_resolvers = new IRpgCharacterMechanicResolver[] {
 			m_dialogueResolver,
 			m_statusResolver,
-			m_spellCastResolver,
-			m_combatResolver,
 			m_movementResolver,
 			m_visionResolver,
 			m_allegianceResolver
 		};
+
 		
 		IActionSceneModel initialModel = model;
 		for(IRpgCharacterMechanicResolver r : m_resolvers)
@@ -200,18 +195,6 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 	public IStatusResolver getStatusResolver()
 	{
 		return m_statusResolver;
-	}
-	
-	@Override
-	public ICombatResolver getCombatResolver()
-	{
-		return m_combatResolver;
-	}
-	
-	@Override
-	public ISpellCastResolver getSpellCastResolver()
-	{
-		return m_spellCastResolver;
 	}
 
 	@Override
@@ -401,15 +384,6 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 								new EntityRoutingRules(DefaultRpgCharacter.this, Direction.ALL_DIRECTIONS), radius));
 		}
 		
-		public void attack(EntityBridge target)
-		{
-			IEntity targetEntity = target.getEntity();
-			if(!(targetEntity instanceof IRpgCharacter))
-				m_logger.error("Attack target must be an rpg character.");
-			else
-				getTaskModel().addTask(new AttackTask((IRpgCharacter)targetEntity));
-		}
-		
 		public void speakTo(EntityBridge target)
 		{
 			IEntity targetEntity = target.getEntity();
@@ -438,17 +412,6 @@ public final class DefaultRpgCharacter implements IRpgCharacter
 			{
 				m_logger.error("Unable to narrate dialogue", e);
 			}
-		}
-		
-		public boolean canAttack(EntityBridge target)
-		{
-			IEntity targetEntity = target.getEntity();
-			if(!(targetEntity instanceof IRpgCharacter))
-			{
-				m_logger.error("Attack Range test target must be an rpg character.");
-				return false;
-			} else
-				return m_combatResolver.testAttackAbility((IRpgCharacter)targetEntity).canAttack();
 		}
 		
 		public void moveTo(Vector3F location, float arrivalTolorance, float waypointTolorance)

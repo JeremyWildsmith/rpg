@@ -19,10 +19,8 @@
 package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.rpg.entity.character.IAllegianceResolver.NullAllegianceResolver;
-import io.github.jevaengine.rpg.entity.character.ICombatResolver.NullCombatResolver;
 import io.github.jevaengine.rpg.entity.character.IDialogueResolver.NullDialogueResolver;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.NullMovementResolver;
-import io.github.jevaengine.rpg.entity.character.ISpellCastResolver.NullSpellCastResolver;
 import io.github.jevaengine.rpg.entity.character.IStatusResolver.NullStatusResolver;
 import io.github.jevaengine.rpg.entity.character.IVisionResolver.NullVisionResolver;
 import io.github.jevaengine.rpg.item.IItemStore;
@@ -49,8 +47,6 @@ public interface IRpgCharacter extends IEntity
 	ILoadout getLoadout();
 	
 	IStatusResolver getStatusResolver();
-	ICombatResolver getCombatResolver();
-	ISpellCastResolver getSpellCastResolver();
 	IDialogueResolver getDialogueResolver();
 	IMovementResolver getMovementResolver();
 	IVisionResolver getVisionResolver();
@@ -171,18 +167,6 @@ public interface IRpgCharacter extends IEntity
 		public IStatusResolver getStatusResolver()
 		{
 			return new NullStatusResolver();
-		}
-		
-		@Override
-		public ICombatResolver getCombatResolver()
-		{
-			return new NullCombatResolver();
-		}
-
-		@Override
-		public ISpellCastResolver getSpellCastResolver()
-		{
-			return new NullSpellCastResolver();
 		}
 		
 		@Override

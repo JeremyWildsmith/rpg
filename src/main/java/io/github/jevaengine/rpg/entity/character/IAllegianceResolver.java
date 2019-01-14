@@ -24,7 +24,7 @@ public interface IAllegianceResolver extends IRpgCharacterMechanicResolver
 {
 	boolean isConflictingAllegiance(IRpgCharacter subject);
 	
-	public static final class NullAllegianceResolver implements IAllegianceResolver
+	final class NullAllegianceResolver implements IAllegianceResolver
 	{
 		@Override
 		public boolean isConflictingAllegiance(IRpgCharacter subject)
@@ -34,7 +34,6 @@ public interface IAllegianceResolver extends IRpgCharacterMechanicResolver
 
 		@Override
 		public void update(int deltaTime) {
-			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 		}
 
 		@Override
