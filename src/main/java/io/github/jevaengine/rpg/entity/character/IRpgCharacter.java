@@ -18,6 +18,8 @@
  */
 package io.github.jevaengine.rpg.entity.character;
 
+import io.github.jevaengine.rpg.AttributeSet;
+import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.entity.character.IAllegianceResolver.NullAllegianceResolver;
 import io.github.jevaengine.rpg.entity.character.IDialogueResolver.NullDialogueResolver;
 import io.github.jevaengine.rpg.entity.character.IMovementResolver.NullMovementResolver;
@@ -51,7 +53,9 @@ public interface IRpgCharacter extends IEntity
 	IMovementResolver getMovementResolver();
 	IVisionResolver getVisionResolver();
 	IAllegianceResolver getAllegianceResolver();
-	
+
+	IImmutableAttributeSet getAttributes();
+
 	public static final class NullRpgCharacter implements IRpgCharacter
 	{
 		private static final AtomicInteger INSTANCE_COUNT = new AtomicInteger();
@@ -191,6 +195,11 @@ public interface IRpgCharacter extends IEntity
 		public IAllegianceResolver getAllegianceResolver()
 		{
 			return new NullAllegianceResolver();
+		}
+
+		@Override
+		public IImmutableAttributeSet getAttributes() {
+			return new AttributeSet();
 		}
 	}
 }

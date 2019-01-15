@@ -20,6 +20,7 @@ package io.github.jevaengine.rpg.entity.character;
 
 import io.github.jevaengine.math.Vector3F;
 import io.github.jevaengine.rpg.AttributeSet;
+import io.github.jevaengine.rpg.IImmutableAttributeSet;
 import io.github.jevaengine.rpg.dialogue.IDialogueRoute;
 import io.github.jevaengine.rpg.dialogue.IDialogueRouteFactory;
 import io.github.jevaengine.rpg.entity.character.tasks.*;
@@ -178,7 +179,12 @@ public class DefaultRpgCharacter implements IRpgCharacter
 		
 		m_observers.raise(IEntityBodyObserver.class).bodyChanged(new NullPhysicsBody(), new NullPhysicsBody());
 	}
-	
+
+	@Override
+	public IImmutableAttributeSet getAttributes() {
+		return m_attributes;
+	}
+
 	@Override
 	public IItemStore getInventory()
 	{
